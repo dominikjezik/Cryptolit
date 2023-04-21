@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Cryptolit</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="cryptolit">Cryptolit</string>
+    <string name="favourite_coins">Favourite Coins</string>
+    <string name="title_converter">Converter</string>
+    <string name="available_coins">Available coins</string>
+    <string name="title_search">Search</string>
 </resources>
