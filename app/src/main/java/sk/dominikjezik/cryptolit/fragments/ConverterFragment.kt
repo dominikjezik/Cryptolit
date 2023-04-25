@@ -1,4 +1,4 @@
-package sk.dominikjezik.cryptolit.ui.home
+package sk.dominikjezik.cryptolit.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import sk.dominikjezik.cryptolit.databinding.FragmentHomeBinding
+import sk.dominikjezik.cryptolit.databinding.FragmentConverterBinding
+import sk.dominikjezik.cryptolit.viewmodels.ConverterViewModel
 
-class HomeFragment : Fragment() {
+class ConverterFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentConverterBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,19 +23,16 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val notificationsViewModel =
+            ViewModelProvider(this).get(ConverterViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentConverterBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textNotifications
+        notificationsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-         */
-
         return root
     }
 

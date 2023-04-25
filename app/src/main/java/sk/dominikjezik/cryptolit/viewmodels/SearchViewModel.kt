@@ -1,4 +1,4 @@
-package sk.dominikjezik.cryptolit.ui.search
+package sk.dominikjezik.cryptolit.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

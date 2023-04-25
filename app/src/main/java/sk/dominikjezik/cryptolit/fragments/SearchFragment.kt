@@ -1,4 +1,4 @@
-package sk.dominikjezik.cryptolit.ui.search
+package sk.dominikjezik.cryptolit.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import sk.dominikjezik.cryptolit.databinding.FragmentSearchBinding
+import sk.dominikjezik.cryptolit.viewmodels.SearchViewModel
 
 class SearchFragment : Fragment() {
 
