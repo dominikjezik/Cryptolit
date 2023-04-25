@@ -33,29 +33,45 @@
 
     <TextView
         android:id="@+id/txtFavouriteCoins"
+        android:textStyle="bold"
         android:textColor="@color/white"
         android:textAllCaps="true"
         android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="@string/favourite_coins"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgAppIcon" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavouriteCoins"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:paddingEnd="16dp"
+        android:clipToPadding="false"
+        android:overScrollMode="always"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtFavouriteCoins" />
+
     <TextView
         android:id="@+id/txtAvailableCoins"
-        android:textColor="@color/white"
-        android:textAllCaps="true"
-        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/available_coins"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFavouriteCoins" />
+        app:layout_constraintTop_toBottomOf="@+id/rvFavouriteCoins" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

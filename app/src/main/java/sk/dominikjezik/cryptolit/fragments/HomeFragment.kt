@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import sk.dominikjezik.cryptolit.adapters.FavouriteCoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentHomeBinding
 import sk.dominikjezik.cryptolit.viewmodels.HomeViewModel
 
@@ -28,12 +29,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-         */
+        binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(listOf("test1", "test2", "test3", "test4", "test5", "test6"));
 
         return root
     }
