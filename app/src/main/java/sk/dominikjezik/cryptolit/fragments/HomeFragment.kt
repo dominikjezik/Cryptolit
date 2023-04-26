@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import sk.dominikjezik.cryptolit.adapters.CoinsAdapter
 import sk.dominikjezik.cryptolit.adapters.FavouriteCoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentHomeBinding
 import sk.dominikjezik.cryptolit.viewmodels.HomeViewModel
@@ -25,11 +27,11 @@ class HomeFragment : Fragment() {
     ): View {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(listOf("test1", "test2", "test3", "test4", "test5", "test6"));
+        binding.rvCoinsList.adapter = CoinsAdapter(listOf("test1", "test2", "test3", "test4", "test5", "test6", "test1", "test2", "test3", "test4", "test5", "test6"));
 
         return root
     }
