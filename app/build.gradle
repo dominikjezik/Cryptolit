@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -54,6 +56,9 @@ dependencies {
 
     // Dagger Hilt
     implementation 'com.google.dagger:hilt-android:2.45'
-    annotationProcessor 'com.google.dagger:hilt-compiler:2.45'
+    kapt 'com.google.dagger:hilt-compiler:2.45'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
 }
