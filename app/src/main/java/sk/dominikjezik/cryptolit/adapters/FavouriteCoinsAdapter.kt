@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.ItemFavouriteCoinBinding
+import sk.dominikjezik.cryptolit.models.Coin
 
-class FavouriteCoinsAdapter(private val items: List<String>) :
+class FavouriteCoinsAdapter(private val items: List<Coin>) :
     RecyclerView.Adapter<FavouriteCoinsAdapter.FavouriteCoinViewHolder>() {
 
 
@@ -29,7 +30,7 @@ class FavouriteCoinsAdapter(private val items: List<String>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: FavouriteCoinViewHolder, position: Int) {
-        viewHolder.binding.txtTitle.text = items[position]
+        viewHolder.binding.coin = items[position];
     }
 
     // Return the size of your dataset (invoked by the layout manager)

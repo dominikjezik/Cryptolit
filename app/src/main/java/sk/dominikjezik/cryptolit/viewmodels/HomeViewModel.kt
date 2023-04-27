@@ -20,10 +20,14 @@ class HomeViewModel @Inject constructor(
     private val _favouriteCoins = MutableLiveData<Response<List<Coin>>>()
     val favouriteCoins: LiveData<Response<List<Coin>>> = _favouriteCoins
 
-    fun ping() = viewModelScope.launch {
+    init {
+        fetchFavouriteCoins()
+    }
+
+    fun fetchFavouriteCoins() = viewModelScope.launch {
         _favouriteCoins.postValue(Response.Waiting());
 
-        val coins = coinsRepository.getCoinInfo("bitcoin,ethereum")
+        val coins = coinsRepository.getCoinInfo("bitcoin,ethereum,decentraland")
 
         if (coins.isSuccessful) {
             _favouriteCoins.postValue(Response.Success(coins.body()!!))

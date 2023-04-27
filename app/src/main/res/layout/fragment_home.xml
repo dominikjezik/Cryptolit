@@ -50,6 +50,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgAppIcon" />
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpiFavouriteCoinLoadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtFavouriteCoins" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFavouriteCoins"
             android:layout_width="match_parent"
