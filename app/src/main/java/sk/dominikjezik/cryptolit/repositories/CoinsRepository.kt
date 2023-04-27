@@ -9,4 +9,7 @@ class CoinsRepository @Inject constructor(
 
     suspend fun ping() = coinGeckoService.ping();
 
+    suspend fun getCoinInfo(id: String) = coinGeckoService.getCoinInfo(id, "eur")
+
+
 }

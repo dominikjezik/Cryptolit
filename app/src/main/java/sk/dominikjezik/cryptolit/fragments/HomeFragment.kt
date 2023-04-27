@@ -41,6 +41,10 @@ class HomeFragment : Fragment() {
             viewModel.ping()
         }
 
+        viewModel.favouriteCoins.observe(viewLifecycleOwner) {
+            Log.d("RESPONSE FRAGMENT", it.data.toString())
+        }
+
         return root
     }
 

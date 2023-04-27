@@ -5,7 +5,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import sk.dominikjezik.cryptolit.api.CoinGeckoService
+import sk.dominikjezik.cryptolit.utilities.API_URL
 import javax.inject.Singleton
 
 @Module
@@ -15,7 +17,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit() = Retrofit.Builder()
-        .baseUrl("https://api.coingecko.com/api/v3/")
+        .baseUrl(API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     @Provides
