@@ -37,11 +37,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.swipeRefreshLayout.setProgressViewOffset(true, 0, 200)
         binding.swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.indigo_500));
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchCoins()
-
         }
 
        this.displayLoading()
@@ -54,7 +52,6 @@ class HomeFragment : Fragment() {
             if (it !is Response.Waiting) {
                 binding.swipeRefreshLayout.isRefreshing = false;
             }
-
         }
 
         viewModel.favouriteCoins.observe(viewLifecycleOwner) {
