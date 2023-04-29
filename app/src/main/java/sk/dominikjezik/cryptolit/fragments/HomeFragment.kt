@@ -1,16 +1,21 @@
 package sk.dominikjezik.cryptolit.fragments
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.adapters.CoinsAdapter
 import sk.dominikjezik.cryptolit.adapters.FavouriteCoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentHomeBinding
+import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.viewmodels.HomeViewModel
 
 @AndroidEntryPoint
@@ -32,13 +37,24 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.displayLoading()
+        binding.swipeRefreshLayout.setProgressViewOffset(true, 0, 200)
+        binding.swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.indigo_500));
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchCoins()
+
+        }
+
+       this.displayLoading()
 
         viewModel.coins.observe(viewLifecycleOwner) {
             it.data?.let {
                 this.displayCoinsList()
                 binding.rvCoinsList.adapter = CoinsAdapter(it)
             }
+            if (it !is Response.Waiting) {
+                binding.swipeRefreshLayout.isRefreshing = false;
+            }
+
         }
 
         viewModel.favouriteCoins.observe(viewLifecycleOwner) {

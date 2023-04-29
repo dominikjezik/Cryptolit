@@ -33,7 +33,6 @@ class HomeViewModel @Inject constructor(
         if (coins.isSuccessful) {
             filterFavouriteCoins(coins.body()!!)
             _coins.postValue(Response.Success(coins.body()!!))
-
         } else {
             _coins.postValue(Response.Error(coins.message()))
         }
