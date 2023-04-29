@@ -1,6 +1,5 @@
 package sk.dominikjezik.cryptolit.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,25 +15,34 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val coinsRepository: CoinsRepository
 ) : ViewModel() {
+    private val _coins = MutableLiveData<Response<List<Coin>>>()
+    private val _favouriteCoins = MutableLiveData<List<Coin>>()
 
-    private val _favouriteCoins = MutableLiveData<Response<List<Coin>>>()
-    val favouriteCoins: LiveData<Response<List<Coin>>> = _favouriteCoins
+    val coins: LiveData<Response<List<Coin>>> = _coins
+    val favouriteCoins: LiveData<List<Coin>> = _favouriteCoins
 
     init {
-        fetchFavouriteCoins()
+        fetchCoins()
     }
 
-    fun fetchFavouriteCoins() = viewModelScope.launch {
-        _favouriteCoins.postValue(Response.Waiting());
+    fun fetchCoins() = viewModelScope.launch {
+        _coins.postValue(Response.Waiting());
 
-        val coins = coinsRepository.getCoinInfo("bitcoin,ethereum,decentraland")
+        val coins = coinsRepository.getCoinInfo("")//getCoinInfo("bitcoin,ethereum,decentraland")
 
         if (coins.isSuccessful) {
-            _favouriteCoins.postValue(Response.Success(coins.body()!!))
+            filterFavouriteCoins(coins.body()!!)
+            _coins.postValue(Response.Success(coins.body()!!))
+
         } else {
-            _favouriteCoins.postValue(Response.Error(coins.message()))
+            _coins.postValue(Response.Error(coins.message()))
         }
 
+    }
+
+    private fun filterFavouriteCoins(coins: List<Coin>) {
+        val list = coins.filter { coin -> coin.id in listOf("bitcoin","ethereum","decentraland") }
+        this._favouriteCoins.postValue(list)
     }
 
 }

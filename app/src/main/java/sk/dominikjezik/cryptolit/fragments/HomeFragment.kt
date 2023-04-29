@@ -1,6 +1,7 @@
 package sk.dominikjezik.cryptolit.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +32,18 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.rvCoinsList.adapter = CoinsAdapter(listOf("test1", "test2", "test3", "test4", "test5", "test6", "test1", "test2", "test3", "test4", "test5", "test6"));
+        this.displayLoading()
+
+        viewModel.coins.observe(viewLifecycleOwner) {
+            it.data?.let {
+                this.displayCoinsList()
+                binding.rvCoinsList.adapter = CoinsAdapter(it)
+            }
+        }
 
         viewModel.favouriteCoins.observe(viewLifecycleOwner) {
-            it.data?.let {
-                binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(it);
-                binding.cpiFavouriteCoinLoadingIndicator.hide();
-            }
+            this.displayFavouriteCoins()
+            binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(it)
         }
 
         return root
@@ -46,5 +52,20 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun displayLoading() {
+        binding.txtFavouriteCoins.visibility = View.GONE
+        binding.llSubHeader.visibility = View.GONE
+        binding.cpiFavouriteCoinLoadingIndicator.visibility = View.VISIBLE
+    }
+
+    private fun displayCoinsList() {
+        binding.cpiFavouriteCoinLoadingIndicator.visibility = View.GONE
+        binding.llSubHeader.visibility = View.VISIBLE
+    }
+
+    private fun displayFavouriteCoins() {
+        binding.txtFavouriteCoins.visibility = View.VISIBLE
     }
 }

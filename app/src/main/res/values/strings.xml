@@ -6,4 +6,6 @@
     <string name="title_converter">Converter</string>
     <string name="available_coins">Available coins</string>
     <string name="title_search">Search</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="slash">/</string>
 </resources>
