@@ -8,9 +8,11 @@ import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.ItemFavouriteCoinBinding
 import sk.dominikjezik.cryptolit.models.Coin
 
-class FavouriteCoinsAdapter(private val items: List<Coin>) :
+class FavouriteCoinsAdapter(
+    private val items: List<Coin>,
+    private val onItemClickListener: ((Coin) -> Unit)? = null
+) :
     RecyclerView.Adapter<FavouriteCoinsAdapter.FavouriteCoinViewHolder>() {
-
 
     class FavouriteCoinViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding: ItemFavouriteCoinBinding
@@ -30,7 +32,13 @@ class FavouriteCoinsAdapter(private val items: List<Coin>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: FavouriteCoinViewHolder, position: Int) {
-        viewHolder.binding.coin = items[position];
+        val coin = items[position]
+
+        viewHolder.binding.materialCardView.setOnClickListener {
+            onItemClickListener?.let { it -> it(coin) }
+        }
+
+        viewHolder.binding.coin = coin
     }
 
     // Return the size of your dataset (invoked by the layout manager)

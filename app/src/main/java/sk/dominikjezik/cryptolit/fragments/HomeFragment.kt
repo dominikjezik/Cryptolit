@@ -1,20 +1,21 @@
 package sk.dominikjezik.cryptolit.fragments
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.adapters.CoinsAdapter
 import sk.dominikjezik.cryptolit.adapters.FavouriteCoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentHomeBinding
+import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.viewmodels.HomeViewModel
 
@@ -54,9 +55,12 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.favouriteCoins.observe(viewLifecycleOwner) {
+        viewModel.favouriteCoins.observe(viewLifecycleOwner) { coins ->
             this.displayFavouriteCoins()
-            binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(it)
+            binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(coins) { coin ->
+                onItemClickListener(coin)
+                Log.d("TEST", "test")
+            }
         }
 
         return root
@@ -65,6 +69,11 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun onItemClickListener(coin: Coin) {
+        val bundle = bundleOf("coin_id" to coin.id)
+        findNavController().navigate(R.id.action_navigation_home_to_coinDetailsFragment, bundle)
     }
 
     private fun displayLoading() {

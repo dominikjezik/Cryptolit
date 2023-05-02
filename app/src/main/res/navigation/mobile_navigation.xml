@@ -9,7 +9,15 @@
         android:id="@+id/navigation_home"
         android:name="sk.dominikjezik.cryptolit.fragments.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_coinDetailsFragment"
+            app:destination="@id/coinDetailsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_static"
+            app:popEnterAnim="@anim/slide_static"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -22,4 +30,13 @@
         android:name="sk.dominikjezik.cryptolit.fragments.ConverterFragment"
         android:label="@string/title_converter"
         tools:layout="@layout/fragment_converter" />
+    <fragment
+        android:id="@+id/coinDetailsFragment"
+        android:name="sk.dominikjezik.cryptolit.fragments.CoinDetailsFragment"
+        android:label="fragment_coin_details"
+        tools:layout="@layout/fragment_coin_details" >
+        <argument
+            android:name="coin_id"
+            app:argType="string" />
+    </fragment>
 </navigation>

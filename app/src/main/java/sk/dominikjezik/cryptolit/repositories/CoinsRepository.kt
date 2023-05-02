@@ -7,9 +7,9 @@ class CoinsRepository @Inject constructor(
     private val coinGeckoService: CoinGeckoService
 ){
 
-    suspend fun ping() = coinGeckoService.ping();
+    suspend fun getCoins(id: String) = coinGeckoService.getCoins(id, "eur")
 
-    suspend fun getCoinInfo(id: String) = coinGeckoService.getCoinInfo(id, "eur")
+    suspend fun getCoinInfo(id: String) = coinGeckoService.getCoinInfo(id)
 
 
 }

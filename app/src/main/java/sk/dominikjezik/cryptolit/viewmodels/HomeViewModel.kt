@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     fun fetchCoins() = viewModelScope.launch {
         _coins.postValue(Response.Waiting());
 
-        val coins = coinsRepository.getCoinInfo("")//getCoinInfo("bitcoin,ethereum,decentraland")
+        val coins = coinsRepository.getCoins("")//getCoinInfo("bitcoin,ethereum,decentraland")
 
         if (coins.isSuccessful) {
             filterFavouriteCoins(coins.body()!!)

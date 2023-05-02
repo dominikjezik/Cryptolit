@@ -13,6 +13,9 @@ interface CoinGeckoService {
     suspend fun ping(): ResponseBody
 
     @GET("coins/markets")
-    suspend fun getCoinInfo(@Query("ids") ids: String, @Query("vs_currency") currency: String): Response<List<Coin>>
+    suspend fun getCoins(@Query("ids") ids: String, @Query("vs_currency") currency: String): Response<List<Coin>>
+
+    @GET("coins/markets")
+    suspend fun getCoinInfo(@Query("ids") ids: String): Response<Coin>
 
 }
