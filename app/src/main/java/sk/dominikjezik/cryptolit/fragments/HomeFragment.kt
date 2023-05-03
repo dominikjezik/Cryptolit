@@ -43,12 +43,14 @@ class HomeFragment : Fragment() {
             viewModel.fetchCoins()
         }
 
-       this.displayLoading()
+        this.displayLoading()
 
         viewModel.coins.observe(viewLifecycleOwner) {
             it.data?.let {
                 this.displayCoinsList()
-                binding.rvCoinsList.adapter = CoinsAdapter(it)
+                binding.rvCoinsList.adapter = CoinsAdapter(it) { coin ->
+                    onItemClickListener(coin)
+                }
             }
             if (it !is Response.Waiting) {
                 binding.swipeRefreshLayout.isRefreshing = false;
@@ -59,7 +61,6 @@ class HomeFragment : Fragment() {
             this.displayFavouriteCoins()
             binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(coins) { coin ->
                 onItemClickListener(coin)
-                Log.d("TEST", "test")
             }
         }
 
@@ -72,7 +73,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun onItemClickListener(coin: Coin) {
-        val bundle = bundleOf("coin_id" to coin.id)
+        val bundle = bundleOf("coin" to coin)
         findNavController().navigate(R.id.action_navigation_home_to_coinDetailsFragment, bundle)
     }
 

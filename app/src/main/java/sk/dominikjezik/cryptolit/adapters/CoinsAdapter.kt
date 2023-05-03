@@ -8,7 +8,10 @@ import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.ItemCoinBinding
 import sk.dominikjezik.cryptolit.models.Coin
 
-class CoinsAdapter(private val items: List<Coin>) :
+class CoinsAdapter(
+    private val items: List<Coin>,
+    private val onItemClickListener: ((Coin) -> Unit)? = null
+) :
     RecyclerView.Adapter<CoinsAdapter.CoinViewHolder>() {
 
     class CoinViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -28,7 +31,13 @@ class CoinsAdapter(private val items: List<Coin>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: CoinsAdapter.CoinViewHolder, position: Int) {
-        viewHolder.binding.coin = items[position]
+        val coin = items[position]
+
+        viewHolder.binding.constraintLayout.setOnClickListener {
+            onItemClickListener?.let { it -> it(coin) }
+        }
+
+        viewHolder.binding.coin = coin
     }
 
     // Return the size of your dataset (invoked by the layout manager)

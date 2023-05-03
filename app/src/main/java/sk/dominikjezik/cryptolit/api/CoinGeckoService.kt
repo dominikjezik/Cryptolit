@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import sk.dominikjezik.cryptolit.models.Coin
+import sk.dominikjezik.cryptolit.models.CoinChartResponse
 
 interface CoinGeckoService {
 
@@ -13,9 +14,19 @@ interface CoinGeckoService {
     suspend fun ping(): ResponseBody
 
     @GET("coins/markets")
-    suspend fun getCoins(@Query("ids") ids: String, @Query("vs_currency") currency: String): Response<List<Coin>>
+    suspend fun getCoins(
+        @Query("ids") ids: String,
+        @Query("vs_currency") currency: String
+    ): Response<List<Coin>>
 
     @GET("coins/markets")
     suspend fun getCoinInfo(@Query("ids") ids: String): Response<Coin>
+
+    @GET("coins/{id}/market_chart")
+    suspend fun getCoinChartData(
+        @Path("id") id: String,
+        @Query("vs_currency") currency: String,
+        @Query("days") days: Int
+    ): Response<CoinChartResponse>
 
 }

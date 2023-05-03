@@ -38,5 +38,8 @@
         <argument
             android:name="coin_id"
             app:argType="string" />
+        <argument
+            android:name="coin"
+            app:argType="sk.dominikjezik.cryptolit.models.Coin" />
     </fragment>
 </navigation>
