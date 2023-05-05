@@ -1,15 +1,14 @@
 package sk.dominikjezik.cryptolit.repositories
 
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 import sk.dominikjezik.cryptolit.api.CoinGeckoService
-import sk.dominikjezik.cryptolit.models.CoinChartResponse
+import sk.dominikjezik.cryptolit.data.CoinDAO
+import sk.dominikjezik.cryptolit.models.StoredCoin
+import sk.dominikjezik.cryptolit.models.StoredCoinType
 import javax.inject.Inject
 
 class CoinsRepository @Inject constructor(
-    private val coinGeckoService: CoinGeckoService
+    private val coinGeckoService: CoinGeckoService,
+    private val coinDAO: CoinDAO
 ){
 
     suspend fun getCoins(id: String) = coinGeckoService.getCoins(id, "eur")
@@ -17,5 +16,13 @@ class CoinsRepository @Inject constructor(
     suspend fun getCoinInfo(id: String) = coinGeckoService.getCoinInfo(id)
 
     suspend fun getCoinChartData(id: String, days: Int ) = coinGeckoService.getCoinChartData(id, "eur", days)
+
+    suspend fun getStoredFavouriteCoins() = coinDAO.getFavouriteCoins()
+
+    suspend fun getStoredWatchlistCoins() = coinDAO.getWatchlistCoins()
+
+    suspend fun insertFavouriteCoin(coinId: String) = coinDAO.insertCoin(StoredCoin(coinId, StoredCoinType.FAVOURITE))
+
+    suspend fun insertWatchlistCoin(coinId: String) = coinDAO.insertCoin(StoredCoin(coinId, StoredCoinType.WATCHLIST))
 
 }

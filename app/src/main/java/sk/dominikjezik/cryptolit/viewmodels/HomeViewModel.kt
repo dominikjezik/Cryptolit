@@ -36,8 +36,9 @@ class HomeViewModel @Inject constructor(
         if (value) {
             this._coinsToDisplay.postValue(Response.Success(_allCoins))
         } else {
-            val list = _allCoins.filter { coin -> coin.id in listOf("bitcoin","ethereum","decentraland") }
-            this._coinsToDisplay.postValue(Response.Success(list))
+            viewModelScope.launch {
+                filterWatchlistCoins()
+            }
         }
     }
 
@@ -48,7 +49,7 @@ class HomeViewModel @Inject constructor(
 
         if (coins.isSuccessful) {
             _allCoins = coins.body()!!
-            filterFavouriteCoins(_allCoins)
+            filterFavouriteCoins()
             _coinsToDisplay.postValue(Response.Success(_allCoins))
         } else {
             _coinsToDisplay.postValue(Response.Error(coins.message()))
@@ -56,9 +57,22 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    private fun filterFavouriteCoins(coins: List<Coin>) {
-        val list = coins.filter { coin -> coin.id in listOf("bitcoin","ethereum","decentraland") }
+    private suspend fun filterFavouriteCoins() {
+        // TODO: zabezpecit ze chybajuce coiny su dodatocne stiahnute zo servera
+        val storedFavouriteCoins = coinsRepository.getStoredFavouriteCoins()
+        val list = _allCoins.filter { coin ->
+            storedFavouriteCoins.any { storedCoin -> storedCoin.coinId == coin.id }
+        }
         this._favouriteCoins.postValue(list)
+    }
+
+    private suspend fun filterWatchlistCoins() {
+        // TODO: zabezpecit ze chybajuce coiny su dodatocne stiahnute zo servera
+        val storedWatchlistCoins = coinsRepository.getStoredWatchlistCoins()
+        val list = _allCoins.filter { coin ->
+            storedWatchlistCoins.any { storedCoin -> storedCoin.coinId == coin.id }
+        }
+        this._coinsToDisplay.postValue(Response.Success(list))
     }
 
 }
