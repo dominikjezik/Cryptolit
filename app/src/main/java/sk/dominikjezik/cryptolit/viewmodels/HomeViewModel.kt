@@ -15,26 +15,43 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val coinsRepository: CoinsRepository
 ) : ViewModel() {
-    private val _coins = MutableLiveData<Response<List<Coin>>>()
+    private lateinit var _allCoins: List<Coin>
+    private val _coinsToDisplay = MutableLiveData<Response<List<Coin>>>()
     private val _favouriteCoins = MutableLiveData<List<Coin>>()
 
-    val coins: LiveData<Response<List<Coin>>> = _coins
+    var selectedAvailableCoins = MutableLiveData(true)
+    val coinsToDisplay: LiveData<Response<List<Coin>>> = _coinsToDisplay
     val favouriteCoins: LiveData<List<Coin>> = _favouriteCoins
 
     init {
         fetchCoins()
     }
 
+    fun toggleAvailableCoinsList(value: Boolean) {
+        if (selectedAvailableCoins.value == value) {
+            return
+        }
+        selectedAvailableCoins.postValue(value)
+
+        if (value) {
+            this._coinsToDisplay.postValue(Response.Success(_allCoins))
+        } else {
+            val list = _allCoins.filter { coin -> coin.id in listOf("bitcoin","ethereum","decentraland") }
+            this._coinsToDisplay.postValue(Response.Success(list))
+        }
+    }
+
     fun fetchCoins() = viewModelScope.launch {
-        _coins.postValue(Response.Waiting());
+        _coinsToDisplay.postValue(Response.Waiting());
 
         val coins = coinsRepository.getCoins("")//getCoinInfo("bitcoin,ethereum,decentraland")
 
         if (coins.isSuccessful) {
-            filterFavouriteCoins(coins.body()!!)
-            _coins.postValue(Response.Success(coins.body()!!))
+            _allCoins = coins.body()!!
+            filterFavouriteCoins(_allCoins)
+            _coinsToDisplay.postValue(Response.Success(_allCoins))
         } else {
-            _coins.postValue(Response.Error(coins.message()))
+            _coinsToDisplay.postValue(Response.Error(coins.message()))
         }
 
     }

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="indigo_700">#303F9F</color>
     <color name="indigo_500">#3F51B5</color>
+    <color name="fadedWhite">#66FFFFFF</color>
 </resources>

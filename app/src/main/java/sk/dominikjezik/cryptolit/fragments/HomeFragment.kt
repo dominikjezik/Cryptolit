@@ -1,7 +1,6 @@
 package sk.dominikjezik.cryptolit.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +37,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewmodel = viewModel
+
         binding.swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.indigo_500));
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchCoins()
@@ -45,7 +47,7 @@ class HomeFragment : Fragment() {
 
         this.displayLoading()
 
-        viewModel.coins.observe(viewLifecycleOwner) {
+        viewModel.coinsToDisplay.observe(viewLifecycleOwner) {
             it.data?.let {
                 this.displayCoinsList()
                 binding.rvCoinsList.adapter = CoinsAdapter(it) { coin ->
