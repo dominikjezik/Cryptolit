@@ -38,6 +38,7 @@ class CoinDetailsFragment : Fragment() {
         viewModel.coin = arguments.getSerializableArg("coin", Coin::class.java)
         viewModel.fetchCoinChartData()
 
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = viewModel
 
         // styling chart

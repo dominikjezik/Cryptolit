@@ -21,8 +21,14 @@ class CoinsRepository @Inject constructor(
 
     suspend fun getStoredWatchlistCoins() = coinDAO.getWatchlistCoins()
 
+    suspend fun findCoinById(coinId: String) = coinDAO.findCoinById(coinId)
+
     suspend fun insertFavouriteCoin(coinId: String) = coinDAO.insertCoin(StoredCoin(coinId, StoredCoinType.FAVOURITE))
 
     suspend fun insertWatchlistCoin(coinId: String) = coinDAO.insertCoin(StoredCoin(coinId, StoredCoinType.WATCHLIST))
+
+    suspend fun deleteFavouriteCoin(coinId: String) = coinDAO.deleteCoin(StoredCoin(coinId, StoredCoinType.FAVOURITE))
+
+    suspend fun deleteWatchlistCoin(coinId: String) = coinDAO.deleteCoin(StoredCoin(coinId, StoredCoinType.WATCHLIST))
 
 }

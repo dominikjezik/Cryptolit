@@ -1,5 +1,6 @@
 package sk.dominikjezik.cryptolit.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
+import sk.dominikjezik.cryptolit.models.StoredCoinType
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
 import javax.inject.Inject
@@ -21,7 +23,18 @@ class CoinDetailsViewModel @Inject constructor(
     lateinit var coin: Coin
     val coinChartData: LiveData<Response<CoinChartResponse>> = _coinChartData
 
+    private var _isFavourite = MutableLiveData(false)
+    val isFavourite: LiveData<Boolean> = _isFavourite
+
+    private var _isWatchlisted = MutableLiveData(false)
+    val isWatchlisted: LiveData<Boolean> = _isWatchlisted
+
     fun fetchCoinChartData() = viewModelScope.launch {
+
+        // TODO premiestnit asi do settera alebo zvlast volat metodu
+        fetchCoinType()
+
+
         _coinChartData.postValue(Response.Waiting())
 
         val data = coinsRepository.getCoinChartData(coin.id, 1)
@@ -31,7 +44,46 @@ class CoinDetailsViewModel @Inject constructor(
         } else {
             _coinChartData.postValue(Response.Error(data.message()))
         }
+    }
 
+    private fun fetchCoinType() = viewModelScope.launch {
+        val storedCoin = coinsRepository.findCoinById(coin.id)
+
+        storedCoin.forEach {
+            if (it.type == StoredCoinType.FAVOURITE) {
+                _isFavourite.postValue(true)
+            } else if (it.type == StoredCoinType.WATCHLIST) {
+                _isWatchlisted.postValue(true)
+            }
+        }
+
+        val data = coinsRepository.getCoinChartData(coin.id, 1)
+
+        if (data.isSuccessful) {
+            _coinChartData.postValue(Response.Success(data.body()!!))
+        } else {
+            _coinChartData.postValue(Response.Error(data.message()))
+        }
+    }
+
+    fun toggleFavouriteCoin() = viewModelScope.launch {
+        if (isFavourite.value == true) {
+            coinsRepository.deleteFavouriteCoin(coin.id)
+            _isFavourite.postValue(false)
+        } else {
+            coinsRepository.insertFavouriteCoin(coin.id)
+            _isFavourite.postValue(true)
+        }
+    }
+
+    fun toggleWatchlistCoin() = viewModelScope.launch {
+        if (isWatchlisted.value == true) {
+            coinsRepository.deleteWatchlistCoin(coin.id)
+            _isWatchlisted.postValue(false)
+        } else {
+            coinsRepository.insertWatchlistCoin(coin.id)
+            _isWatchlisted.postValue(true)
+        }
     }
 
 }
