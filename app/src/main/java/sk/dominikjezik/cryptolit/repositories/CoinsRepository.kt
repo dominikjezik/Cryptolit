@@ -11,7 +11,10 @@ class CoinsRepository @Inject constructor(
     private val coinDAO: CoinDAO
 ){
 
-    suspend fun getCoins(id: String) = coinGeckoService.getCoins(id, "eur")
+    suspend fun getCoins() = coinGeckoService.getCoins("", "eur")
+
+    suspend fun getCoins(coins: List<StoredCoin>)
+        = coinGeckoService.getCoins(coins.map { coin -> coin.coinId }.joinToString(","), "eur")
 
     suspend fun getCoinInfo(id: String) = coinGeckoService.getCoinInfo(id)
 

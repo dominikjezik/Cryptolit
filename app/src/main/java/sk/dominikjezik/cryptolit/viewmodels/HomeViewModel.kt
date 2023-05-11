@@ -33,28 +33,33 @@ class HomeViewModel @Inject constructor(
         }
         selectedAvailableCoins.postValue(value)
 
-        if (value) {
+        displayCoinsInList(value)
+    }
+
+    fun fetchCoins() = viewModelScope.launch {
+        _coinsToDisplay.postValue(Response.Waiting());
+
+        val coins = coinsRepository.getCoins()
+
+        if (coins.isSuccessful) {
+            _allCoins = coins.body()!!
+            filterFavouriteCoins()
+            _coinsToDisplay.postValue(Response.Success(_allCoins))
+            displayCoinsInList(selectedAvailableCoins.value)
+        } else {
+            _coinsToDisplay.postValue(Response.Error(coins.message()))
+        }
+
+    }
+
+    private fun displayCoinsInList(displayAvailableCoins: Boolean? = null) {
+        if (displayAvailableCoins == true) {
             this._coinsToDisplay.postValue(Response.Success(_allCoins))
         } else {
             viewModelScope.launch {
                 filterWatchlistCoins()
             }
         }
-    }
-
-    fun fetchCoins() = viewModelScope.launch {
-        _coinsToDisplay.postValue(Response.Waiting());
-
-        val coins = coinsRepository.getCoins("")//getCoinInfo("bitcoin,ethereum,decentraland")
-
-        if (coins.isSuccessful) {
-            _allCoins = coins.body()!!
-            filterFavouriteCoins()
-            _coinsToDisplay.postValue(Response.Success(_allCoins))
-        } else {
-            _coinsToDisplay.postValue(Response.Error(coins.message()))
-        }
-
     }
 
     private suspend fun filterFavouriteCoins() {
