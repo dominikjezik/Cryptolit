@@ -7,6 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
+import sk.dominikjezik.cryptolit.models.SearchResult
 
 interface CoinGeckoService {
 
@@ -28,5 +29,8 @@ interface CoinGeckoService {
         @Query("vs_currency") currency: String,
         @Query("days") days: Int
     ): Response<CoinChartResponse>
+
+    @GET("search")
+    suspend fun search(@Query("query") query: String): Response<SearchResult>
 
 }

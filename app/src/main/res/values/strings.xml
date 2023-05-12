@@ -8,4 +8,5 @@
     <string name="title_search">Search</string>
     <string name="watchlist">Watchlist</string>
     <string name="slash">/</string>
+    <string name="search_for_a_coin">Search for a coin</string>
 </resources>

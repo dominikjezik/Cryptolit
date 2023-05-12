@@ -20,6 +20,8 @@ class CoinsRepository @Inject constructor(
 
     suspend fun getCoinChartData(id: String, days: Int ) = coinGeckoService.getCoinChartData(id, "eur", days)
 
+    suspend fun getSearchResults(query: String) = coinGeckoService.search(query)
+
     suspend fun getStoredFavouriteCoins() = coinDAO.getFavouriteCoins()
 
     suspend fun getStoredWatchlistCoins() = coinDAO.getWatchlistCoins()
