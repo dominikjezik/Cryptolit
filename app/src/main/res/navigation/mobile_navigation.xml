@@ -20,10 +20,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_search"
         android:name="sk.dominikjezik.cryptolit.fragments.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_coinDetailsFragment"
+            app:destination="@id/coinDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_converter"
@@ -36,10 +40,12 @@
         android:label="fragment_coin_details"
         tools:layout="@layout/fragment_coin_details" >
         <argument
-            android:name="coin_id"
-            app:argType="string" />
-        <argument
             android:name="coin"
-            app:argType="sk.dominikjezik.cryptolit.models.Coin" />
+            app:argType="sk.dominikjezik.cryptolit.models.Coin"
+            app:nullable="true" />
+        <argument
+            android:name="searched_coin"
+            app:argType="sk.dominikjezik.cryptolit.models.SearchedCoin"
+            app:nullable="true" />
     </fragment>
 </navigation>

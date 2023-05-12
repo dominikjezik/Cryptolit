@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding.widget.RxTextView
 import dagger.hilt.android.AndroidEntryPoint
 import sk.dominikjezik.cryptolit.R
@@ -19,7 +18,6 @@ import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.viewmodels.SearchViewModel
 import java.util.concurrent.TimeUnit
 
-
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
@@ -29,6 +27,12 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModels()
     private lateinit var coinsResultAdapter: CoinsResultAdapter
 
+    /**
+     * Metóda nastaví data binding, vytvorí príslušný adaptér
+     * pre recycler view, nastaví automatické odosielanie
+     * požiadavky api po skončení písania
+     * a nastaví observer.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,6 +56,20 @@ class SearchFragment : Fragment() {
                 viewModel.fetchResults(textChanged.toString())
             }
 
+        setupObservers()
+
+        return root
+    }
+
+
+    /**
+     * Metóda nastaví príslušné akcie, ktoré sa majú vykonať ak sa zmenia
+     * pozorované atribúty z viewmodelu. Ak sa na výsledok čaká zobrazí
+     * indikátor čakania, ak nastala chyba zobrazí o tom správu. Ak
+     * prídu dáta z API zobrazí ich, v prípade, že sa nenašli
+     * žiadne výsledky zobrazí o tom správu.
+     */
+    private fun setupObservers() {
         viewModel.coinsResult.observe(viewLifecycleOwner) { response ->
             if (response is Response.Waiting) {
                 displayLoadingIndicator()
@@ -70,22 +88,35 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-
-        return root
     }
 
+
+    /**
+     * Metóda zobrazí zoznam výsledkov a skryje
+     * indikátor načítavania a skryje správu.
+     */
     private fun displayRecyclerViewWithResults() {
         binding.cpiLoadingIndicator.visibility = View.GONE
         binding.rvResultsList.visibility = View.VISIBLE
         binding.txtMsg.visibility = View.GONE
     }
 
+
+    /**
+     * Metóda zobrazí indikátor načítavania a skryje
+     * zoznam výsledkov a skryje správu.
+     */
     private fun displayLoadingIndicator() {
         binding.cpiLoadingIndicator.visibility = View.VISIBLE
         binding.rvResultsList.visibility = View.GONE
         binding.txtMsg.visibility = View.GONE
     }
 
+
+    /**
+     * Metóda zobrazí správu a skryje zoznam
+     * výsledkov a indikátor načítavania.
+     */
     private fun displayMessage(msg: String) {
         binding.cpiLoadingIndicator.visibility = View.GONE
         binding.rvResultsList.visibility = View.GONE
@@ -93,8 +124,15 @@ class SearchFragment : Fragment() {
         binding.txtMsg.text = msg
     }
 
+
+    /**
+     * Metóda sa spustí pri stlačení na položku vo výsledkoch
+     * vyhľadávania a otvorí nový fragment s detailami
+     * o kryptomene.
+     */
     private fun onItemClickListener(coin: SearchedCoin) {
-        
+        val bundle = bundleOf("searched_coin" to coin)
+        findNavController().navigate(R.id.action_navigation_search_to_coinDetailsFragment, bundle)
     }
 
     override fun onDestroyView() {

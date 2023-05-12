@@ -1,6 +1,5 @@
 package sk.dominikjezik.cryptolit.utilities
 
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import java.io.Serializable
@@ -17,10 +16,10 @@ import java.io.Serializable
  * @param clazz
  * @return
  */
-fun <T : Serializable?> Bundle?.getSerializableArg(name: String, clazz: Class<T>): T
+fun <T : Serializable?> Bundle?.getSerializableArg(name: String, clazz: Class<T>): T?
 {
     return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-        this!!.getSerializable(name, clazz)!!
+        this!!.getSerializable(name, clazz)
     else
-        this!!.getSerializable(name) as T
+        this!!.getSerializable(name) as T?
 }

@@ -96,7 +96,7 @@
             android:id="@id/txtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(viewmodel.coin.current_price) + '€'}"
+            android:text="@{String.valueOf(viewmodel.priceToDisplay) + '€'}"
             tools:text="28,376.79€"
             android:textColor="@color/white"
             android:textSize="36sp"

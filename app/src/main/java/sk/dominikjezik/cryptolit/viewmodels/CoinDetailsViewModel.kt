@@ -1,6 +1,5 @@
 package sk.dominikjezik.cryptolit.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,6 +28,9 @@ class CoinDetailsViewModel @Inject constructor(
     private var _isWatchlisted = MutableLiveData(false)
     val isWatchlisted: LiveData<Boolean> = _isWatchlisted
 
+    private var _priceToDisplay = MutableLiveData(0f)
+    val priceToDisplay: LiveData<Float> = _priceToDisplay
+
     fun fetchCoinChartData() = viewModelScope.launch {
 
         // TODO premiestnit asi do settera alebo zvlast volat metodu
@@ -41,6 +43,7 @@ class CoinDetailsViewModel @Inject constructor(
 
         if (data.isSuccessful) {
             _coinChartData.postValue(Response.Success(data.body()!!))
+            _priceToDisplay.postValue(data.body()!!.prices.last()[1])
         } else {
             _coinChartData.postValue(Response.Error(data.message()))
         }

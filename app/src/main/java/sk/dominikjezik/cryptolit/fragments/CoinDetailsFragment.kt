@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import sk.dominikjezik.cryptolit.databinding.FragmentCoinDetailsBinding
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
+import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.utilities.getSerializableArg
 import sk.dominikjezik.cryptolit.viewmodels.CoinDetailsViewModel
 
@@ -35,7 +36,15 @@ class CoinDetailsFragment : Fragment() {
         _binding = FragmentCoinDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        viewModel.coin = arguments.getSerializableArg("coin", Coin::class.java)
+        val coin = arguments.getSerializableArg("coin", Coin::class.java)
+        val searchedCoin = arguments.getSerializableArg("searched_coin", SearchedCoin::class.java)
+
+        if (coin != null) {
+            viewModel.coin = coin
+        } else {
+            viewModel.coin = Coin(searchedCoin!!.id, searchedCoin.symbol, searchedCoin.name, 0f, searchedCoin.large)
+        }
+
         viewModel.fetchCoinChartData()
 
         binding.lifecycleOwner = viewLifecycleOwner
