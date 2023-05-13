@@ -16,6 +16,9 @@ interface CoinDAO {
     @Query("SELECT * FROM coins WHERE type='WATCHLIST'")
     suspend fun getWatchlistCoins(): List<StoredCoin>
 
+    @Query("SELECT * FROM coins")
+    suspend fun getStoredCoins(): List<StoredCoin>
+
     @Query("SELECT * FROM coins WHERE coinId = :coinId")
     suspend fun findCoinById(coinId: String): List<StoredCoin>
 

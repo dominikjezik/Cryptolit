@@ -17,13 +17,16 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val coinsRepository: CoinsRepository
 ) : ViewModel() {
-    private lateinit var _allCoins: List<Coin>
+    private lateinit var _allCoins: MutableList<Coin>
+
     private val _coinsToDisplay = MutableLiveData<Response<List<Coin>>>()
+    val coinsToDisplay: LiveData<Response<List<Coin>>> = _coinsToDisplay
+
     private val _favouriteCoins = MutableLiveData<List<Coin>>()
+    val favouriteCoins: LiveData<List<Coin>> = _favouriteCoins
 
     var selectedAvailableCoins = MutableLiveData(true)
-    val coinsToDisplay: LiveData<Response<List<Coin>>> = _coinsToDisplay
-    val favouriteCoins: LiveData<List<Coin>> = _favouriteCoins
+
 
     init {
         fetchCoins()
@@ -45,7 +48,8 @@ class HomeViewModel @Inject constructor(
             val coins = coinsRepository.getCoins()
 
             if (coins.isSuccessful) {
-                _allCoins = coins.body()!!
+                _allCoins = (coins.body() as MutableList<Coin>?)!!
+                findMissingCoins()
                 filterFavouriteCoins()
                 _coinsToDisplay.postValue(Response.Success(_allCoins))
                 displayCoinsInList(selectedAvailableCoins.value)
@@ -73,22 +77,40 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private suspend fun findMissingCoins() {
+        val storedCoins = coinsRepository.getStoredCoins()
+        val coinsForDownload = storedCoins.filter { storedCoin ->
+            !_allCoins.any { coin -> coin.id == storedCoin.coinId }
+        }
+
+        if (coinsForDownload.isEmpty()) {
+            return
+        }
+
+        try {
+            val downloadedCoins = this.coinsRepository.getCoins(coinsForDownload);
+
+            if (downloadedCoins.isSuccessful) {
+                this._allCoins.addAll(downloadedCoins.body()!!)
+            }
+
+        } catch (_: Exception) { }
+    }
+
     private suspend fun filterFavouriteCoins() {
-        // TODO: zabezpecit ze chybajuce coiny su dodatocne stiahnute zo servera
         val storedFavouriteCoins = coinsRepository.getStoredFavouriteCoins()
-        val list = _allCoins.filter { coin ->
+        val favouriteCoins = _allCoins.filter { coin ->
             storedFavouriteCoins.any { storedCoin -> storedCoin.coinId == coin.id }
         }
-        this._favouriteCoins.postValue(list)
+        this._favouriteCoins.postValue(favouriteCoins)
     }
 
     private suspend fun filterWatchlistCoins() {
-        // TODO: zabezpecit ze chybajuce coiny su dodatocne stiahnute zo servera
         val storedWatchlistCoins = coinsRepository.getStoredWatchlistCoins()
-        val list = _allCoins.filter { coin ->
+        val watchlistCoins = _allCoins.filter { coin ->
             storedWatchlistCoins.any { storedCoin -> storedCoin.coinId == coin.id }
         }
-        this._coinsToDisplay.postValue(Response.Success(list))
+        this._coinsToDisplay.postValue(Response.Success(watchlistCoins))
     }
 
 }
