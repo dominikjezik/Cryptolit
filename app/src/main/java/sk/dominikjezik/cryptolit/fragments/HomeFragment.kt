@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.adapters.CoinsAdapter
@@ -46,16 +47,27 @@ class HomeFragment : Fragment() {
         }
 
         this.displayLoading()
+        this.setupObservers()
 
-        viewModel.coinsToDisplay.observe(viewLifecycleOwner) {
-            it.data?.let {
+        return root
+    }
+
+    private fun setupObservers() {
+        viewModel.coinsToDisplay.observe(viewLifecycleOwner) { response ->
+            response.data?.let {
                 this.displayCoinsList()
                 binding.rvCoinsList.adapter = CoinsAdapter(it) { coin ->
                     onItemClickListener(coin)
                 }
             }
-            if (it !is Response.Waiting) {
+            if (response !is Response.Waiting) {
                 binding.swipeRefreshLayout.isRefreshing = false;
+            }
+
+            if (response is Response.Error) {
+                hideLoading()
+                Snackbar.make(binding.root, response.message!!, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("refresh") { viewModel.fetchCoins() }.show()
             }
         }
 
@@ -65,13 +77,6 @@ class HomeFragment : Fragment() {
                 onItemClickListener(coin)
             }
         }
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun onItemClickListener(coin: Coin) {
@@ -92,5 +97,14 @@ class HomeFragment : Fragment() {
 
     private fun displayFavouriteCoins() {
         binding.txtFavouriteCoins.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.cpiFavouriteCoinLoadingIndicator.visibility = View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

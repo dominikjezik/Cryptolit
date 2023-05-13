@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
+import java.lang.Exception
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,15 +41,24 @@ class HomeViewModel @Inject constructor(
     fun fetchCoins() = viewModelScope.launch {
         _coinsToDisplay.postValue(Response.Waiting());
 
-        val coins = coinsRepository.getCoins()
+        try {
+            val coins = coinsRepository.getCoins()
 
-        if (coins.isSuccessful) {
-            _allCoins = coins.body()!!
-            filterFavouriteCoins()
-            _coinsToDisplay.postValue(Response.Success(_allCoins))
-            displayCoinsInList(selectedAvailableCoins.value)
-        } else {
-            _coinsToDisplay.postValue(Response.Error(coins.message()))
+            if (coins.isSuccessful) {
+                _allCoins = coins.body()!!
+                filterFavouriteCoins()
+                _coinsToDisplay.postValue(Response.Success(_allCoins))
+                displayCoinsInList(selectedAvailableCoins.value)
+            } else {
+                _coinsToDisplay.postValue(Response.Error(coins.message()))
+            }
+
+        } catch (e: UnknownHostException) {
+            e.printStackTrace();
+            _coinsToDisplay.postValue(Response.Error("No internet connection!"))
+        } catch (e: Exception) {
+            e.printStackTrace();
+            _coinsToDisplay.postValue(Response.Error("Exception"))
         }
 
     }
