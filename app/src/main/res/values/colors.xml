@@ -10,4 +10,6 @@
     <color name="indigo_700">#303F9F</color>
     <color name="indigo_500">#3F51B5</color>
     <color name="fadedWhite">#66FFFFFF</color>
+    <color name="green">#1B881F</color>
+    <color name="red">#B91B1B</color>
 </resources>

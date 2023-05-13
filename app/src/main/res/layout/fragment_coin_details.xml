@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewmodel"
             type="sk.dominikjezik.cryptolit.viewmodels.CoinDetailsViewModel" />
@@ -79,21 +80,43 @@
             app:layout_constraintTop_toTopOf="@+id/btnFavourite"
             android:onClick="@{() -> viewmodel.toggleWatchlistCoin() }" />
 
-        <TextView
-            android:id="@id/txtName"
+        <LinearLayout
+            android:id="@+id/linearLayoutHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewmodel.coin.name}"
-            tools:text="Bitcoin"
-            android:textColor="@color/white"
-            android:textSize="26sp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnBack" />
+            app:layout_constraintTop_toBottomOf="@+id/btnBack">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipMarketCapRand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.coin.marketCapRank}"
+                tools:text="#1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="@{viewmodel.coin.marketCapRank == null ? View.GONE : View.VISIBLE}"
+                />
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.coin.name}"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                android:layout_marginTop="3dp"
+                tools:text="Bitcoin" />
+
+        </LinearLayout>
+
+
 
         <TextView
-            android:id="@id/txtPrice"
+            android:id="@+id/txtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(viewmodel.priceToDisplay) + '€'}"
@@ -102,8 +125,60 @@
             android:textSize="36sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/txtName"
-            app:layout_constraintTop_toBottomOf="@+id/txtName" />
+            app:layout_constraintStart_toStartOf="@+id/linearLayoutHeader"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardPriceChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="@{viewmodel.coin.priceChangePercentage24hGrowth ? @color/green : @color/red}"
+            tools:cardBackgroundColor="@color/green"
+            app:layout_constraintBottom_toBottomOf="@+id/txtPrice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txtPrice">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@{viewmodel.coin.priceChangePercentage24hGrowth ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
+                    tools:src="@drawable/ic_arrow_drop_up"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/txtPriceChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.coin.priceChangePercentage24h}"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginVertical="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="4,52%" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
