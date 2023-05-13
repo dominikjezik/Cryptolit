@@ -18,7 +18,7 @@ class CoinsRepository @Inject constructor(
 
     suspend fun getCoinInfo(id: String) = coinGeckoService.getCoinInfo(id)
 
-    suspend fun getCoinChartData(id: String, days: Int ) = coinGeckoService.getCoinChartData(id, "eur", days)
+    suspend fun getCoinChartData(id: String, period: String ) = coinGeckoService.getCoinChartData(id, "eur", period)
 
     suspend fun getSearchResults(query: String) = coinGeckoService.search(query)
 

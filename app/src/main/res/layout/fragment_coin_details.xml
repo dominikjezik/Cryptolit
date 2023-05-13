@@ -105,6 +105,99 @@
             app:layout_constraintStart_toStartOf="@+id/txtName"
             app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedChip="@id/chip1d"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtPrice">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip1d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24h"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(1) }" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip7d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7d"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(7) }" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip14d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14d"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(14) }" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip30d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30d"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(30) }" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip365d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1y"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(365) }" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipmax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="max"
+                android:textStyle="bold"
+                app:chipCornerRadius="8dp"
+                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleSelectedPeriodToMax() }" />
+
+        </com.google.android.material.chip.ChipGroup>
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
@@ -112,7 +205,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

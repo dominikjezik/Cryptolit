@@ -18,9 +18,18 @@ class CoinDetailsViewModel @Inject constructor(
     private val coinsRepository: CoinsRepository
 )  : ViewModel() {
     private val _coinChartData = MutableLiveData<Response<CoinChartResponse>>()
-
-    lateinit var coin: Coin
     val coinChartData: LiveData<Response<CoinChartResponse>> = _coinChartData
+
+    private lateinit var _coin: Coin
+    var coin: Coin
+        get() = _coin
+        set(value) {
+            _coin = value
+            fetchCoinChartData()
+            fetchCoinType()
+        }
+
+    private var selectedPeriod = "1"
 
     private var _isFavourite = MutableLiveData(false)
     val isFavourite: LiveData<Boolean> = _isFavourite
@@ -31,15 +40,10 @@ class CoinDetailsViewModel @Inject constructor(
     private var _priceToDisplay = MutableLiveData(0f)
     val priceToDisplay: LiveData<Float> = _priceToDisplay
 
-    fun fetchCoinChartData() = viewModelScope.launch {
-
-        // TODO premiestnit asi do settera alebo zvlast volat metodu
-        fetchCoinType()
-
-
+    private fun fetchCoinChartData() = viewModelScope.launch {
         _coinChartData.postValue(Response.Waiting())
 
-        val data = coinsRepository.getCoinChartData(coin.id, 1)
+        val data = coinsRepository.getCoinChartData(coin.id, selectedPeriod)
 
         if (data.isSuccessful) {
             _coinChartData.postValue(Response.Success(data.body()!!))
@@ -59,14 +63,22 @@ class CoinDetailsViewModel @Inject constructor(
                 _isWatchlisted.postValue(true)
             }
         }
+    }
 
-        val data = coinsRepository.getCoinChartData(coin.id, 1)
-
-        if (data.isSuccessful) {
-            _coinChartData.postValue(Response.Success(data.body()!!))
-        } else {
-            _coinChartData.postValue(Response.Error(data.message()))
+    fun toggleSelectedPeriod(period: Int) {
+        if (selectedPeriod == period.toString()) {
+            return
         }
+        selectedPeriod = period.toString()
+        fetchCoinChartData()
+    }
+
+    fun toggleSelectedPeriodToMax() {
+        if (selectedPeriod == "max") {
+            return
+        }
+        selectedPeriod = "max"
+        fetchCoinChartData()
     }
 
     fun toggleFavouriteCoin() = viewModelScope.launch {

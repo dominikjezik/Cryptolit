@@ -27,7 +27,7 @@ interface CoinGeckoService {
     suspend fun getCoinChartData(
         @Path("id") id: String,
         @Query("vs_currency") currency: String,
-        @Query("days") days: Int
+        @Query("days") period: String
     ): Response<CoinChartResponse>
 
     @GET("search")

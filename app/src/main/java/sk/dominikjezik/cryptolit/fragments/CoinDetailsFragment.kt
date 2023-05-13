@@ -19,7 +19,6 @@ import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.utilities.getSerializableArg
 import sk.dominikjezik.cryptolit.viewmodels.CoinDetailsViewModel
 
-
 @AndroidEntryPoint
 class CoinDetailsFragment : Fragment() {
 
@@ -44,8 +43,6 @@ class CoinDetailsFragment : Fragment() {
         } else {
             viewModel.coin = Coin(searchedCoin!!.id, searchedCoin.symbol, searchedCoin.name, 0f, searchedCoin.large)
         }
-
-        viewModel.fetchCoinChartData()
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = viewModel
