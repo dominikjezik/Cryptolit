@@ -65,6 +65,16 @@ class CoinDetailsViewModel @Inject constructor(
         }
     }
 
+    fun displayPrice(price: Float) {
+        this._priceToDisplay.postValue(price)
+    }
+
+    fun displayDefaultPrice() {
+        this._coinChartData.value?.let {
+            this._priceToDisplay.postValue(it.data!!.prices.last()[1])
+        }
+    }
+
     fun toggleSelectedPeriod(period: Int) {
         if (selectedPeriod == period.toString()) {
             return

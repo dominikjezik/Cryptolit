@@ -1,8 +1,10 @@
 package sk.dominikjezik.cryptolit.fragments
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -35,6 +37,9 @@ class CoinDetailsFragment : Fragment() {
         _binding = FragmentCoinDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewmodel = viewModel
+
         val coin = arguments.getSerializableArg("coin", Coin::class.java)
         val searchedCoin = arguments.getSerializableArg("searched_coin", SearchedCoin::class.java)
 
@@ -44,27 +49,22 @@ class CoinDetailsFragment : Fragment() {
             viewModel.coin = Coin(searchedCoin!!.id, searchedCoin.symbol, searchedCoin.name, 0f, searchedCoin.large)
         }
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewmodel = viewModel
-
-        // styling chart
-        this.styleChart()
-
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
+        this.setupChart()
+        this.setupObservers()
+
+        return root;
+    }
+
+    private fun setupObservers() {
         viewModel.coinChartData.observe(viewLifecycleOwner) {
             it.data?.let {
                 processResponseIntoChart(it)
             }
         }
-
-        return root;
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     private fun processResponseIntoChart(response: CoinChartResponse) {
         val entries = response.prices.map { Entry(it[0], it[1]) }
@@ -76,15 +76,41 @@ class CoinDetailsFragment : Fragment() {
 
         binding.lineChart.data = LineData(lineDataSet)
         binding.lineChart.invalidate()
-
-
     }
 
-    private fun styleChart() = binding.lineChart.apply {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupChart() = binding.lineChart.apply {
+
+        isHighlightPerDragEnabled = true
+
+        setOnTouchListener { v, event ->
+            val x = event.x
+            val y = event.y
+            when (event.action) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                    val entry: Entry =
+                        getEntryByTouchPoint(x, y)
+                    if (entry != null) {
+                        val lastPrice = entry.y
+
+                        viewModel.displayPrice(lastPrice)
+                    }
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    // Zrušenie highlightu po uvoľnení prsta
+                    highlightValue(null)
+                    //priceTextView.setText("")
+                    viewModel.displayDefaultPrice()
+                }
+            }
+            false
+        }
+
         legend.isEnabled = false
         description.isEnabled = false
         isHighlightPerTapEnabled = false
-        isHighlightPerDragEnabled = false
+        isHighlightPerDragEnabled = true
 
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(false)
@@ -100,6 +126,11 @@ class CoinDetailsFragment : Fragment() {
         axisLeft.textColor = Color.WHITE
         axisLeft.gridColor = Color.WHITE
         axisLeft.gridLineWidth = 0.2f
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
