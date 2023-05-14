@@ -1,22 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.ConverterFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/text_notifications"
+    <data>
+        <variable
+            name="viewmodel"
+            type="sk.dominikjezik.cryptolit.viewmodels.ConverterViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:background="@drawable/gradient_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        tools:context=".fragments.ConverterFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgAppIcon"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_currency_exchange_24"
+                app:tint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_notifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currency_converter"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgAppIcon"
+                app:layout_constraintStart_toEndOf="@+id/imgAppIcon"
+                app:layout_constraintTop_toTopOf="@+id/imgAppIcon" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpiLoadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:layout_marginEnd="16dp"
+                app:indicatorColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imgAppIcon" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtFieldSymbolFrom"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:textColorHint="#fff"
+                app:boxStrokeColor="@color/text_input_box_stroke"
+                app:boxStrokeWidth="2dp"
+                app:hintTextColor="#fff"
+                app:layout_constraintStart_toStartOf="@+id/imgAppIcon"
+                app:layout_constraintTop_toBottomOf="@+id/imgAppIcon"
+                app:endIconTint="@color/white">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:labelFor="@id/txtFieldSymbolFrom"
+                    android:textColor="@color/white"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:background="@drawable/border_background"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <EditText
+                android:id="@+id/edtFrom"
+                android:onTextChanged="@{viewmodel.onUserFromInputTextChanged}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/zero"
+                android:textColor="@color/white"
+                android:inputType="numberDecimal"
+                android:textColorHint="@color/fadedWhite"
+                android:textCursorDrawable="@null"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textAlignment="textEnd"
+                android:textSize="26sp"
+                android:padding="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/txtFieldSymbolFrom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtFieldSymbolFrom"
+                app:layout_constraintTop_toTopOf="@+id/txtFieldSymbolFrom" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtFieldSymbolTo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textColorHint="#fff"
+                app:boxStrokeColor="@color/text_input_box_stroke"
+                app:boxStrokeWidth="2dp"
+                app:endIconTint="@color/white"
+                app:hintTextColor="#fff"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/txtFieldSymbolFrom"
+                app:layout_constraintTop_toBottomOf="@+id/txtFieldSymbolFrom">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/white"
+                    android:labelFor="@id/txtFieldSymbolFrom"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:background="@drawable/border_background"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <EditText
+                android:id="@+id/edtTo"
+                android:text="@={viewmodel.displayToPrice}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/zero"
+                android:enabled="false"
+                android:padding="12dp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textColorHint="@color/fadedWhite"
+                android:textCursorDrawable="@null"
+                android:textSize="26sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/txtFieldSymbolTo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtFieldSymbolTo"
+                app:layout_constraintTop_toTopOf="@+id/txtFieldSymbolTo" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

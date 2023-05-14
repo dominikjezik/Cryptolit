@@ -7,6 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
+import sk.dominikjezik.cryptolit.models.ExchangeRatesResponse
 import sk.dominikjezik.cryptolit.models.SearchResult
 
 interface CoinGeckoService {
@@ -32,5 +33,8 @@ interface CoinGeckoService {
 
     @GET("search")
     suspend fun search(@Query("query") query: String): Response<SearchResult>
+
+    @GET("exchange_rates")
+    suspend fun getExchangeRates(): Response<ExchangeRatesResponse>
 
 }

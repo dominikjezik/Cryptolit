@@ -12,4 +12,6 @@
     <string name="too_many_requests">Too many requests!</string>
     <string name="an_error_occurred">An error occurred</string>
     <string name="no_internet_connection">No internet connection!</string>
+    <string name="currency_converter">Currency Converter</string>
+    <string name="zero">0</string>
 </resources>
