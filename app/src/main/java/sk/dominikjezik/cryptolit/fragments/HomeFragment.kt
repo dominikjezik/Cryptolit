@@ -78,10 +78,15 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.favouriteCoins.observe(viewLifecycleOwner) { coins ->
-            this.displayFavouriteCoins()
-            binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(coins) { coin ->
-                onItemClickListener(coin)
+            if (coins.isEmpty()) {
+                this.hideFavouriteCoins()
+            } else {
+                this.displayFavouriteCoins()
+                binding.rvFavouriteCoins.adapter = FavouriteCoinsAdapter(coins) { coin ->
+                    onItemClickListener(coin)
+                }
             }
+
         }
     }
 
@@ -103,6 +108,12 @@ class HomeFragment : Fragment() {
 
     private fun displayFavouriteCoins() {
         binding.txtFavouriteCoins.visibility = View.VISIBLE
+        binding.rvFavouriteCoins.visibility = View.VISIBLE
+    }
+
+    private fun hideFavouriteCoins() {
+        binding.txtFavouriteCoins.visibility = View.GONE
+        binding.rvFavouriteCoins.visibility = View.GONE
     }
 
     private fun hideLoading() {
