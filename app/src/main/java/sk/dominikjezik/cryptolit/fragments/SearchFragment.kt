@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding.widget.RxTextView
 import dagger.hilt.android.AndroidEntryPoint
 import sk.dominikjezik.cryptolit.R
@@ -15,6 +16,7 @@ import sk.dominikjezik.cryptolit.adapters.CoinsResultAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentSearchBinding
 import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.utilities.Response
+import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.viewmodels.SearchViewModel
 import java.util.concurrent.TimeUnit
 
@@ -75,8 +77,13 @@ class SearchFragment : Fragment() {
                 displayLoadingIndicator()
             }
             else if (response is Response.Error) {
-                binding.cpiLoadingIndicator.visibility = View.GONE
-                // TODO
+                val msg = when (response.errorType) {
+                    ResponseError.TOO_MANY_REQUESTS -> getString(R.string.too_many_requests)
+                    ResponseError.NO_INTERNET_CONNECTION -> getString(R.string.no_internet_connection)
+                    else -> getString(R.string.an_error_occurred)
+                }
+
+                displayMessage(msg)
             } else {
                 response.data?.let {
                     coinsResultAdapter.setCoinsResult(it)

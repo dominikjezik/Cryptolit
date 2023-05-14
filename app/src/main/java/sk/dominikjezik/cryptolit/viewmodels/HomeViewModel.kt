@@ -1,5 +1,6 @@
 package sk.dominikjezik.cryptolit.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
+import sk.dominikjezik.cryptolit.utilities.ResponseError.*
 import java.lang.Exception
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -54,15 +56,19 @@ class HomeViewModel @Inject constructor(
                 _coinsToDisplay.postValue(Response.Success(_allCoins))
                 displayCoinsInList(selectedAvailableCoins.value)
             } else {
-                _coinsToDisplay.postValue(Response.Error(coins.message()))
+                if (coins.code() == 429) {
+                    _coinsToDisplay.postValue(Response.Error(TOO_MANY_REQUESTS))
+                } else {
+                    _coinsToDisplay.postValue(Response.Error(GENERAL_ERROR))
+                }
             }
 
         } catch (e: UnknownHostException) {
             e.printStackTrace();
-            _coinsToDisplay.postValue(Response.Error("No internet connection!"))
+            _coinsToDisplay.postValue(Response.Error(NO_INTERNET_CONNECTION))
         } catch (e: Exception) {
             e.printStackTrace();
-            _coinsToDisplay.postValue(Response.Error("Exception"))
+            _coinsToDisplay.postValue(Response.Error(GENERAL_ERROR))
         }
 
     }

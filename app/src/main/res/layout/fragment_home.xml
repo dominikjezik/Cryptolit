@@ -10,7 +10,6 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-
         tools:context=".fragments.HomeFragment"
         android:background="@drawable/gradient_bg"
         android:layout_width="match_parent"

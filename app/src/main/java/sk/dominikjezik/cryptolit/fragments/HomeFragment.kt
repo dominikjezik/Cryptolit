@@ -17,6 +17,7 @@ import sk.dominikjezik.cryptolit.adapters.FavouriteCoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentHomeBinding
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.utilities.Response
+import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.viewmodels.HomeViewModel
 
 @AndroidEntryPoint
@@ -66,7 +67,12 @@ class HomeFragment : Fragment() {
 
             if (response is Response.Error) {
                 hideLoading()
-                Snackbar.make(binding.root, response.message!!, Snackbar.LENGTH_INDEFINITE)
+                val msg = when (response.errorType) {
+                    ResponseError.TOO_MANY_REQUESTS -> getString(R.string.too_many_requests)
+                    ResponseError.NO_INTERNET_CONNECTION -> getString(R.string.no_internet_connection)
+                    else -> getString(R.string.an_error_occurred)
+                }
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE)
                     .setAction("refresh") { viewModel.fetchCoins() }.show()
             }
         }

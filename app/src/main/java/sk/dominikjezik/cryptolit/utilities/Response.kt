@@ -5,10 +5,10 @@ package sk.dominikjezik.cryptolit.utilities
 // https://proandroiddev.com/modeling-retrofit-responses-with-sealed-classes-and-coroutines-9d6302077dfe
 sealed class Response<T>(
     val data: T? = null,
-    val message: String? = null
+    val errorType: ResponseError? = null
 ) {
     class Success<T>(data: T): Response<T>(data)
-    class Error<T>(message: String?): Response<T>(null, message)
+    class Error<T>(type: ResponseError): Response<T>(null, type)
     class Waiting<T> : Response<T>()
 }
 

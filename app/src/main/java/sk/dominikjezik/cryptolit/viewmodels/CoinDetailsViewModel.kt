@@ -11,6 +11,9 @@ import sk.dominikjezik.cryptolit.models.CoinChartResponse
 import sk.dominikjezik.cryptolit.models.StoredCoinType
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
+import sk.dominikjezik.cryptolit.utilities.ResponseError.*
+import java.lang.Exception
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,21 +49,34 @@ class CoinDetailsViewModel @Inject constructor(
     private var _priceChangePercentageGrowth = MutableLiveData(true)
     val priceChangePercentageGrowth: LiveData<Boolean> = _priceChangePercentageGrowth
 
-    private fun fetchCoinChartData() = viewModelScope.launch {
+    fun fetchCoinChartData() = viewModelScope.launch {
         _coinChartData.postValue(Response.Waiting())
 
-        val data = coinsRepository.getCoinChartData(coin.id, selectedPeriod)
+        try {
+            val data = coinsRepository.getCoinChartData(coin.id, selectedPeriod)
 
-        if (data.isSuccessful) {
-            _coinChartData.postValue(Response.Success(data.body()!!))
-            _priceToDisplay.postValue(data.body()!!.prices.last()[1])
+            if (data.isSuccessful) {
+                _coinChartData.postValue(Response.Success(data.body()!!))
+                _priceToDisplay.postValue(data.body()!!.prices.last()[1])
 
-            val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
-            _priceChangePercentageGrowth.postValue(percent>=0)
-            _priceChangePercentage.postValue(String.format("%.2f %%", percent))
-        } else {
-            _coinChartData.postValue(Response.Error(data.message()))
+                val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
+                _priceChangePercentageGrowth.postValue(percent>=0)
+                _priceChangePercentage.postValue(String.format("%.2f %%", percent))
+            } else {
+                if (data.code() == 429) {
+                    _coinChartData.postValue(Response.Error(TOO_MANY_REQUESTS))
+                } else {
+                    _coinChartData.postValue(Response.Error(GENERAL_ERROR))
+                }
+            }
+        } catch (e: UnknownHostException) {
+            e.printStackTrace();
+            _coinChartData.postValue(Response.Error(NO_INTERNET_CONNECTION))
+        } catch (e: Exception) {
+            e.printStackTrace();
+            _coinChartData.postValue(Response.Error(GENERAL_ERROR))
         }
+
     }
 
     private fun fetchCoinType() = viewModelScope.launch {

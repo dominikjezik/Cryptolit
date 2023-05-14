@@ -13,11 +13,15 @@ import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.FragmentCoinDetailsBinding
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
 import sk.dominikjezik.cryptolit.models.SearchedCoin
+import sk.dominikjezik.cryptolit.utilities.Response
+import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.utilities.getSerializableArg
 import sk.dominikjezik.cryptolit.viewmodels.CoinDetailsViewModel
 
@@ -58,9 +62,19 @@ class CoinDetailsFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.coinChartData.observe(viewLifecycleOwner) {
-            it.data?.let {
+        viewModel.coinChartData.observe(viewLifecycleOwner) { response ->
+            response.data?.let {
                 processResponseIntoChart(it)
+            }
+
+            if (response is Response.Error) {
+                val msg = when (response.errorType) {
+                    ResponseError.TOO_MANY_REQUESTS -> getString(R.string.too_many_requests)
+                    ResponseError.NO_INTERNET_CONNECTION -> getString(R.string.no_internet_connection)
+                    else -> getString(R.string.an_error_occurred)
+                }
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+                    .setAction("refresh") { viewModel.fetchCoinChartData() }.show()
             }
         }
     }
@@ -88,7 +102,7 @@ class CoinDetailsFragment : Fragment() {
             val y = event.y
             when (event.action) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                    val entry: Entry =
+                    val entry: Entry? =
                         getEntryByTouchPoint(x, y)
                     if (entry != null) {
                         val lastPrice = entry.y
@@ -100,7 +114,6 @@ class CoinDetailsFragment : Fragment() {
                 MotionEvent.ACTION_UP -> {
                     // Zrušenie highlightu po uvoľnení prsta
                     highlightValue(null)
-                    //priceTextView.setText("")
                     viewModel.displayDefaultPrice()
                 }
             }

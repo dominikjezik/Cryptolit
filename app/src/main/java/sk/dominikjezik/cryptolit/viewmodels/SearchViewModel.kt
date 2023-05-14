@@ -9,6 +9,9 @@ import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
+import sk.dominikjezik.cryptolit.utilities.ResponseError
+import java.lang.Exception
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,13 +35,26 @@ class SearchViewModel @Inject constructor(
         searchQuery = query
         _coinsResult.postValue(Response.Waiting())
 
-        val coins = coinsRepository.getSearchResults(query)
+        try {
+            val coins = coinsRepository.getSearchResults(query)
 
-        if (coins.isSuccessful) {
-            _coinsResult.postValue(Response.Success(coins.body()!!.coins))
-        } else {
-            _coinsResult.postValue(Response.Error(coins.message()))
+            if (coins.isSuccessful) {
+                _coinsResult.postValue(Response.Success(coins.body()!!.coins))
+            } else {
+                if (coins.code() == 429) {
+                    _coinsResult.postValue(Response.Error(ResponseError.TOO_MANY_REQUESTS))
+                } else {
+                    _coinsResult.postValue(Response.Error(ResponseError.GENERAL_ERROR))
+                }
+            }
+        } catch (e: UnknownHostException) {
+            e.printStackTrace();
+            _coinsResult.postValue(Response.Error(ResponseError.NO_INTERNET_CONNECTION))
+        } catch (e: Exception) {
+            e.printStackTrace();
+            _coinsResult.postValue(Response.Error(ResponseError.GENERAL_ERROR))
         }
+
     }
 
     /**
