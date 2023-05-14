@@ -14,6 +14,7 @@ import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.utilities.ResponseError.*
 import java.lang.Exception
 import java.net.UnknownHostException
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +34,7 @@ class CoinDetailsViewModel @Inject constructor(
         }
 
     private var selectedPeriod = "1"
+    private val decimalFormat = DecimalFormat("#.##########")
 
     private var _isFavourite = MutableLiveData(false)
     val isFavourite: LiveData<Boolean> = _isFavourite
@@ -40,8 +42,8 @@ class CoinDetailsViewModel @Inject constructor(
     private var _isWatchlisted = MutableLiveData(false)
     val isWatchlisted: LiveData<Boolean> = _isWatchlisted
 
-    private var _priceToDisplay = MutableLiveData(0f)
-    val priceToDisplay: LiveData<Float> = _priceToDisplay
+    private var _priceToDisplay = MutableLiveData("0")
+    val priceToDisplay: LiveData<String> = _priceToDisplay
 
     private var _priceChangePercentage = MutableLiveData("0%")
     val priceChangePercentage: LiveData<String> = _priceChangePercentage
@@ -57,7 +59,7 @@ class CoinDetailsViewModel @Inject constructor(
 
             if (data.isSuccessful) {
                 _coinChartData.postValue(Response.Success(data.body()!!))
-                _priceToDisplay.postValue(data.body()!!.prices.last()[1])
+                displayPrice(data.body()!!.prices.last()[1])
 
                 val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
                 _priceChangePercentageGrowth.postValue(percent>=0)
@@ -92,12 +94,14 @@ class CoinDetailsViewModel @Inject constructor(
     }
 
     fun displayPrice(price: Float) {
-        this._priceToDisplay.postValue(price)
+        val decimalPlaces = if (price < 1) 8 else if(price < 10) 4 else 2
+        decimalFormat.maximumFractionDigits = decimalPlaces
+        this._priceToDisplay.postValue(decimalFormat.format(price))
     }
 
     fun displayDefaultPrice() {
         this._coinChartData.value?.let {
-            this._priceToDisplay.postValue(it.data!!.prices.last()[1])
+            displayPrice(it.data!!.prices.last()[1])
         }
     }
 

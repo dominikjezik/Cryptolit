@@ -120,19 +120,19 @@
             </LinearLayout>
 
 
-
             <TextView
                 android:id="@+id/txtPrice"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(viewmodel.priceToDisplay) + '€'}"
-                tools:text="28,376.79€"
-                android:textColor="@color/white"
-                android:textSize="36sp"
-                android:textStyle="bold"
                 android:layout_marginTop="8dp"
+                android:text="@{String.valueOf(viewmodel.priceToDisplay) + '€'}"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/materialCardPriceChange"
                 app:layout_constraintStart_toStartOf="@+id/linearLayoutHeader"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader"
+                tools:text="28,376.79€" />
 
 
             <com.google.android.material.card.MaterialCardView
