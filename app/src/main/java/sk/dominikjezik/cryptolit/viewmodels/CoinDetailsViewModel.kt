@@ -40,6 +40,12 @@ class CoinDetailsViewModel @Inject constructor(
     private var _priceToDisplay = MutableLiveData(0f)
     val priceToDisplay: LiveData<Float> = _priceToDisplay
 
+    private var _priceChangePercentage = MutableLiveData("0%")
+    val priceChangePercentage: LiveData<String> = _priceChangePercentage
+
+    private var _priceChangePercentageGrowth = MutableLiveData(true)
+    val priceChangePercentageGrowth: LiveData<Boolean> = _priceChangePercentageGrowth
+
     private fun fetchCoinChartData() = viewModelScope.launch {
         _coinChartData.postValue(Response.Waiting())
 
@@ -48,6 +54,10 @@ class CoinDetailsViewModel @Inject constructor(
         if (data.isSuccessful) {
             _coinChartData.postValue(Response.Success(data.body()!!))
             _priceToDisplay.postValue(data.body()!!.prices.last()[1])
+
+            val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
+            _priceChangePercentageGrowth.postValue(percent>=0)
+            _priceChangePercentage.postValue(String.format("%.2f %%", percent))
         } else {
             _coinChartData.postValue(Response.Error(data.message()))
         }
