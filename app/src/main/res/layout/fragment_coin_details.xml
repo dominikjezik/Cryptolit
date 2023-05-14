@@ -11,280 +11,286 @@
             type="sk.dominikjezik.cryptolit.viewmodels.CoinDetailsViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_bg"
-        tools:context=".fragments.CoinDetailsFragment">
+        android:background="@drawable/gradient_bg">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBack"
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_arrow_back"
-            app:iconSize="32dp"
-            app:iconTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgCoinIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            app:imageUrl="@{viewmodel.coin.image}"
-            tools:src="@drawable/ic_launcher_foreground"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btnBack"
-            app:layout_constraintStart_toEndOf="@+id/btnBack"
-            app:layout_constraintTop_toTopOf="@+id/btnBack" />
-
-        <TextView
-            android:id="@+id/txtSymbol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@{viewmodel.coin.symbol}"
-            tools:text="BTC"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imgCoinIcon"
-            app:layout_constraintStart_toEndOf="@+id/imgCoinIcon"
-            app:layout_constraintTop_toTopOf="@+id/imgCoinIcon" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFavourite"
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@{ viewmodel.isFavourite ? @drawable/ic_star : @drawable/ic_star_outline }"
-            tools:icon="@drawable/ic_star_outline"
-            app:iconSize="32dp"
-            app:iconTint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{() -> viewmodel.toggleFavouriteCoin() }" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnWatchlist"
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@{ viewmodel.isWatchlisted ? @drawable/ic_bookmark : @drawable/ic_bookmark_border }"
-            tools:icon="@drawable/ic_bookmark_border"
-            app:iconSize="32dp"
-            app:iconTint="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/btnFavourite"
-            app:layout_constraintTop_toTopOf="@+id/btnFavourite"
-            android:onClick="@{() -> viewmodel.toggleWatchlistCoin() }" />
-
-        <LinearLayout
-            android:id="@+id/linearLayoutHeader"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnBack">
+            tools:context=".fragments.CoinDetailsFragment">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipMarketCapRand"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBack"
+                style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@{viewmodel.coin.marketCapRank}"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="@{viewmodel.coin.marketCapRank == null ? View.GONE : View.VISIBLE}"
-                app:chipCornerRadius="8dp"
-                tools:text="#1" />
+                app:icon="@drawable/ic_arrow_back"
+                app:iconSize="32dp"
+                app:iconTint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgCoinIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:imageUrl="@{viewmodel.coin.image}"
+                tools:src="@drawable/ic_launcher_foreground"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+                app:layout_constraintStart_toEndOf="@+id/btnBack"
+                app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
             <TextView
-                android:id="@+id/txtName"
+                android:id="@+id/txtSymbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="@{viewmodel.coin.name}"
+                android:layout_marginStart="16dp"
+                android:text="@{viewmodel.coin.symbol}"
+                tools:text="BTC"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/imgCoinIcon"
+                app:layout_constraintStart_toEndOf="@+id/imgCoinIcon"
+                app:layout_constraintTop_toTopOf="@+id/imgCoinIcon" />
 
-                tools:text="Bitcoin" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFavourite"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@{ viewmodel.isFavourite ? @drawable/ic_star : @drawable/ic_star_outline }"
+                tools:icon="@drawable/ic_star_outline"
+                app:iconSize="32dp"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.toggleFavouriteCoin() }" />
 
-        </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWatchlist"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@{ viewmodel.isWatchlisted ? @drawable/ic_bookmark : @drawable/ic_bookmark_border }"
+                tools:icon="@drawable/ic_bookmark_border"
+                app:iconSize="32dp"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/btnFavourite"
+                app:layout_constraintTop_toTopOf="@+id/btnFavourite"
+                android:onClick="@{() -> viewmodel.toggleWatchlistCoin() }" />
 
-
-
-        <TextView
-            android:id="@+id/txtPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(viewmodel.priceToDisplay) + '€'}"
-            tools:text="28,376.79€"
-            android:textColor="@color/white"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/linearLayoutHeader"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader" />
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardPriceChange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:cardBackgroundColor="@{viewmodel.priceChangePercentageGrowth ? @color/green : @color/red}"
-            tools:cardBackgroundColor="@color/green"
-            app:layout_constraintBottom_toBottomOf="@+id/txtPrice"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txtPrice">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/linearLayoutHeader"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnBack">
 
-                <ImageView
-                    android:id="@+id/imageView"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMarketCapRand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@{viewmodel.priceChangePercentageGrowth ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
-                    tools:src="@drawable/ic_arrow_drop_up"
-                    android:scaleX="1.5"
-                    android:scaleY="1.5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    android:layout_marginEnd="8dp"
+                    android:text="@{viewmodel.coin.marketCapRank}"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="@{viewmodel.coin.marketCapRank == null ? View.GONE : View.VISIBLE}"
+                    app:chipCornerRadius="8dp"
+                    tools:text="#1" />
 
                 <TextView
-                    android:id="@+id/txtPriceChange"
+                    android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewmodel.priceChangePercentage}"
+                    android:layout_marginTop="3dp"
+                    android:text="@{viewmodel.coin.name}"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="26sp"
+
+                    tools:text="Bitcoin" />
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(viewmodel.priceToDisplay) + '€'}"
+                tools:text="28,376.79€"
+                android:textColor="@color/white"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/linearLayoutHeader"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutHeader" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardPriceChange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@{viewmodel.priceChangePercentageGrowth ? @color/green : @color/red}"
+                tools:cardBackgroundColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/txtPrice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtPrice">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@{viewmodel.priceChangePercentageGrowth ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
+                        tools:src="@drawable/ic_arrow_drop_up"
+                        android:scaleX="1.5"
+                        android:scaleY="1.5"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/txtPriceChange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewmodel.priceChangePercentage}"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginVertical="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="4,52%" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:checkedChip="@id/chip1d"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPrice">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="24h"
                     android:textStyle="bold"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginVertical="4dp"
+                    app:chipCornerRadius="8dp"
+                    style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="4,52%" />
+                    android:onClick="@{() -> viewmodel.toggleSelectedPeriod(1) }" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip7d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7d"
+                    android:textStyle="bold"
+                    app:chipCornerRadius="8dp"
+                    style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> viewmodel.toggleSelectedPeriod(7) }" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip14d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14d"
+                    android:textStyle="bold"
+                    app:chipCornerRadius="8dp"
+                    style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> viewmodel.toggleSelectedPeriod(14) }" />
 
-        </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip30d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="30d"
+                    android:textStyle="bold"
+                    app:chipCornerRadius="8dp"
+                    style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> viewmodel.toggleSelectedPeriod(30) }" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip365d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1y"
+                    android:textStyle="bold"
+                    app:chipCornerRadius="8dp"
+                    style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> viewmodel.toggleSelectedPeriod(365) }" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            app:checkedChip="@id/chip1d"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPrice">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipmax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="max"
+                    android:textStyle="bold"
+                    app:chipCornerRadius="8dp"
+                    style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> viewmodel.toggleSelectedPeriodToMax() }" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip1d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24h"
-                android:textStyle="bold"
-                app:chipCornerRadius="8dp"
-                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
-                app:layout_constraintBottom_toBottomOf="parent"
+            </com.google.android.material.chip.ChipGroup>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(1) }" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip7d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="7d"
-                android:textStyle="bold"
-                app:chipCornerRadius="8dp"
-                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(7) }" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip14d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="14d"
-                android:textStyle="bold"
-                app:chipCornerRadius="8dp"
-                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(14) }" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip30d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30d"
-                android:textStyle="bold"
-                app:chipCornerRadius="8dp"
-                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(30) }" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip365d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1y"
-                android:textStyle="bold"
-                app:chipCornerRadius="8dp"
-                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.toggleSelectedPeriod(365) }" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipmax"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="max"
-                android:textStyle="bold"
-                app:chipCornerRadius="8dp"
-                style="@style/Theme.Cryptolit.MaterialComponents.Chip.Choice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.toggleSelectedPeriodToMax() }" />
-
-        </com.google.android.material.chip.ChipGroup>
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>
