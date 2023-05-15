@@ -1,6 +1,5 @@
 package sk.dominikjezik.cryptolit.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +10,9 @@ import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.utilities.ResponseError.*
+import sk.dominikjezik.cryptolit.utilities.handleIfNotSuccessful
+import sk.dominikjezik.cryptolit.utilities.handleNetworkCall
 import java.lang.Exception
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,10 +30,22 @@ class HomeViewModel @Inject constructor(
     var selectedAvailableCoins = MutableLiveData(true)
 
 
+    /**
+     * Pri vytvorení viewmodelu spustí metódu na získanie kryptomien z API.
+     */
     init {
         fetchCoins()
     }
 
+
+    /**
+     * Metóda slúži na zmenu kryptomien, ktoré sú zobrazené v zozname kryptomien.
+     * Ak je parameter value true zobrazí všetky dostupné kryptomeny.
+     * Ak je parameter value false zobrazí kryptomeny ozanačené
+     * ako watchlisted.
+     *
+     * @param value
+     */
     fun toggleAvailableCoinsList(value: Boolean) {
         if (selectedAvailableCoins.value == value) {
             return
@@ -43,32 +55,23 @@ class HomeViewModel @Inject constructor(
         displayCoinsInList(value)
     }
 
+
+    
     fun fetchCoins() = viewModelScope.launch {
         _coinsToDisplay.postValue(Response.Waiting());
 
-        try {
+        handleNetworkCall(_coinsToDisplay) {
             val coins = coinsRepository.getCoins()
 
-            if (coins.isSuccessful) {
-                _allCoins = (coins.body() as MutableList<Coin>?)!!
-                findMissingCoins()
-                filterFavouriteCoins()
-                _coinsToDisplay.postValue(Response.Success(_allCoins))
-                displayCoinsInList(selectedAvailableCoins.value)
-            } else {
-                if (coins.code() == 429) {
-                    _coinsToDisplay.postValue(Response.Error(TOO_MANY_REQUESTS))
-                } else {
-                    _coinsToDisplay.postValue(Response.Error(GENERAL_ERROR))
-                }
+            if (!handleIfNotSuccessful(coins, _coinsToDisplay)) {
+                return@handleNetworkCall
             }
 
-        } catch (e: UnknownHostException) {
-            e.printStackTrace();
-            _coinsToDisplay.postValue(Response.Error(NO_INTERNET_CONNECTION))
-        } catch (e: Exception) {
-            e.printStackTrace();
-            _coinsToDisplay.postValue(Response.Error(GENERAL_ERROR))
+            _allCoins = (coins.body() as MutableList<Coin>?)!!
+            findMissingCoins()
+            filterFavouriteCoins()
+            _coinsToDisplay.postValue(Response.Success(_allCoins))
+            displayCoinsInList(selectedAvailableCoins.value)
         }
 
     }

@@ -10,8 +10,8 @@ import sk.dominikjezik.cryptolit.models.ExchangeRate
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.utilities.ResponseError
-import java.lang.Exception
-import java.net.UnknownHostException
+import sk.dominikjezik.cryptolit.utilities.handleIfNotSuccessful
+import sk.dominikjezik.cryptolit.utilities.handleNetworkCall
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -31,28 +31,19 @@ class ConverterViewModel @Inject constructor(
     val displayToPrice = MutableLiveData<String>()
 
     fun fetchExchangeRates() = viewModelScope.launch {
-        try {
-            _response.postValue(Response.Waiting())
+        _response.postValue(Response.Waiting())
 
+        handleNetworkCall(_response) {
             val rates = coinsRepository.getExchangeRates()
 
-            if (rates.isSuccessful) {
-                _response.postValue(Response.Success(rates.body()!!.rates))
-                _exchangeRates = rates.body()!!.rates
-            } else {
-                if (rates.code() == 429) {
-                    _response.postValue(Response.Error(ResponseError.TOO_MANY_REQUESTS))
-                } else {
-                    _response.postValue(Response.Error(ResponseError.GENERAL_ERROR))
-                }
+            if (!handleIfNotSuccessful(rates, _response)) {
+                return@handleNetworkCall
             }
-        } catch (e: UnknownHostException) {
-            e.printStackTrace();
-            _response.postValue(Response.Error(ResponseError.NO_INTERNET_CONNECTION))
-        } catch (e: Exception) {
-            e.printStackTrace();
-            _response.postValue(Response.Error(ResponseError.GENERAL_ERROR))
+
+            _response.postValue(Response.Success(rates.body()!!.rates))
+            _exchangeRates = rates.body()!!.rates
         }
+
     }
 
     fun changeFromExchangeRate(id: String) {

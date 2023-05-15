@@ -20,9 +20,7 @@ import sk.dominikjezik.cryptolit.databinding.FragmentCoinDetailsBinding
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
 import sk.dominikjezik.cryptolit.models.SearchedCoin
-import sk.dominikjezik.cryptolit.utilities.Response
-import sk.dominikjezik.cryptolit.utilities.ResponseError
-import sk.dominikjezik.cryptolit.utilities.getSerializableArg
+import sk.dominikjezik.cryptolit.utilities.*
 import sk.dominikjezik.cryptolit.viewmodels.CoinDetailsViewModel
 
 @AndroidEntryPoint
@@ -68,13 +66,7 @@ class CoinDetailsFragment : Fragment() {
             }
 
             if (response is Response.Error) {
-                val msg = when (response.errorType) {
-                    ResponseError.TOO_MANY_REQUESTS -> getString(R.string.too_many_requests)
-                    ResponseError.NO_INTERNET_CONNECTION -> getString(R.string.no_internet_connection)
-                    else -> getString(R.string.an_error_occurred)
-                }
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
-                    .setAction("refresh") { viewModel.fetchCoinChartData() }.show()
+                displayErrorSnackBar(response, binding.root, requireContext(), viewModel::fetchCoinChartData)
             }
         }
     }

@@ -16,6 +16,8 @@ import sk.dominikjezik.cryptolit.adapters.CoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentConverterBinding
 import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.utilities.ResponseError
+import sk.dominikjezik.cryptolit.utilities.displayErrorSnackBar
+import sk.dominikjezik.cryptolit.utilities.getErrorMessage
 import sk.dominikjezik.cryptolit.viewmodels.ConverterViewModel
 
 @AndroidEntryPoint
@@ -59,9 +61,6 @@ class ConverterFragment : Fragment() {
 
                 binding.autoCompleteFrom.setText(viewModel.selectedFromExchangeRate, false)
                 binding.autoCompleteTo.setText(viewModel.selectedToExchangeRate, false)
-
-                //viewModel.changeFromExchangeRate("eur")
-                //viewModel.changeToExchangeRate("btc")
             }
 
             if (response is Response.Waiting) {
@@ -70,15 +69,7 @@ class ConverterFragment : Fragment() {
 
             if (response is Response.Error) {
                 binding.cpiLoadingIndicator.visibility = View.GONE
-
-                val msg = when (response.errorType) {
-                    ResponseError.TOO_MANY_REQUESTS -> getString(R.string.too_many_requests)
-                    ResponseError.NO_INTERNET_CONNECTION -> getString(R.string.no_internet_connection)
-                    else -> getString(R.string.an_error_occurred)
-                }
-
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("refresh") { viewModel.fetchExchangeRates() }.show()
+                displayErrorSnackBar(response, binding.root, requireContext(), viewModel::fetchExchangeRates)
             }
         }
 

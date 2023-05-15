@@ -16,6 +16,7 @@ import sk.dominikjezik.cryptolit.databinding.FragmentSearchBinding
 import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.utilities.ResponseError
+import sk.dominikjezik.cryptolit.utilities.getErrorMessage
 import sk.dominikjezik.cryptolit.viewmodels.SearchViewModel
 import java.util.concurrent.TimeUnit
 
@@ -33,6 +34,11 @@ class SearchFragment : Fragment() {
      * pre recycler view, nastaví automatické odosielanie
      * požiadavky api po skončení písania
      * a nastaví observer.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
      */
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,13 +82,7 @@ class SearchFragment : Fragment() {
                 displayLoadingIndicator()
             }
             else if (response is Response.Error) {
-                val msg = when (response.errorType) {
-                    ResponseError.TOO_MANY_REQUESTS -> getString(R.string.too_many_requests)
-                    ResponseError.NO_INTERNET_CONNECTION -> getString(R.string.no_internet_connection)
-                    else -> getString(R.string.an_error_occurred)
-                }
-
-                displayMessage(msg)
+                displayMessage(getErrorMessage(response, requireContext()))
             } else {
                 response.data?.let {
                     coinsResultAdapter.setCoinsResult(it)

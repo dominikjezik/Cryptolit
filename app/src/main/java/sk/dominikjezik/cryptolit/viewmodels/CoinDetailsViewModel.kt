@@ -12,8 +12,8 @@ import sk.dominikjezik.cryptolit.models.StoredCoinType
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
 import sk.dominikjezik.cryptolit.utilities.ResponseError.*
-import java.lang.Exception
-import java.net.UnknownHostException
+import sk.dominikjezik.cryptolit.utilities.handleIfNotSuccessful
+import sk.dominikjezik.cryptolit.utilities.handleNetworkCall
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -54,30 +54,21 @@ class CoinDetailsViewModel @Inject constructor(
     fun fetchCoinChartData() = viewModelScope.launch {
         _coinChartData.postValue(Response.Waiting())
 
-        try {
+        handleNetworkCall(_coinChartData) {
             val data = coinsRepository.getCoinChartData(coin.id, selectedPeriod)
 
-            if (data.isSuccessful) {
-                _coinChartData.postValue(Response.Success(data.body()!!))
-                displayPrice(data.body()!!.prices.last()[1])
-
-                val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
-                _priceChangePercentageGrowth.postValue(percent>=0)
-                _priceChangePercentage.postValue(String.format("%.2f %%", percent))
-            } else {
-                if (data.code() == 429) {
-                    _coinChartData.postValue(Response.Error(TOO_MANY_REQUESTS))
-                } else {
-                    _coinChartData.postValue(Response.Error(GENERAL_ERROR))
-                }
+            if (!handleIfNotSuccessful(data, _coinChartData)) {
+                return@handleNetworkCall
             }
-        } catch (e: UnknownHostException) {
-            e.printStackTrace();
-            _coinChartData.postValue(Response.Error(NO_INTERNET_CONNECTION))
-        } catch (e: Exception) {
-            e.printStackTrace();
-            _coinChartData.postValue(Response.Error(GENERAL_ERROR))
+
+            _coinChartData.postValue(Response.Success(data.body()!!))
+            displayPrice(data.body()!!.prices.last()[1])
+
+            val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
+            _priceChangePercentageGrowth.postValue(percent>=0)
+            _priceChangePercentage.postValue(String.format("%.2f %%", percent))
         }
+
 
     }
 
