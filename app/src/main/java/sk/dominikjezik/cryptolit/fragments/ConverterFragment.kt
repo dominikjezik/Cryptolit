@@ -57,11 +57,11 @@ class ConverterFragment : Fragment() {
                 binding.autoCompleteFrom.setAdapter(arrayAdapter)
                 binding.autoCompleteTo.setAdapter(arrayAdapter)
 
-                binding.autoCompleteFrom.setText("eur", false)
-                binding.autoCompleteTo.setText("btc", false)
+                binding.autoCompleteFrom.setText(viewModel.selectedFromExchangeRate, false)
+                binding.autoCompleteTo.setText(viewModel.selectedToExchangeRate, false)
 
-                viewModel.changeFromExchangeRate("eur")
-                viewModel.changeToExchangeRate("btc")
+                //viewModel.changeFromExchangeRate("eur")
+                //viewModel.changeToExchangeRate("btc")
             }
 
             if (response is Response.Waiting) {

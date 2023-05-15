@@ -24,8 +24,8 @@ class ConverterViewModel @Inject constructor(
     private val _response = MutableLiveData<Response<Map<String, ExchangeRate>>>()
     val response: LiveData<Response<Map<String, ExchangeRate>>> = _response
 
-    private var selectedFromExchangeRate: String? = null
-    private var selectedToExchangeRate: String? = null
+    var selectedFromExchangeRate: String = "eur"
+    var selectedToExchangeRate: String = "btc"
     private var fromPrice = ""
 
     val displayToPrice = MutableLiveData<String>()
@@ -77,8 +77,8 @@ class ConverterViewModel @Inject constructor(
         }
 
         if (
-            selectedFromExchangeRate == null ||
-            selectedToExchangeRate == null
+            !_exchangeRates.containsKey(selectedFromExchangeRate) ||
+            !_exchangeRates.containsKey(selectedToExchangeRate)
         ) {
             return
         }

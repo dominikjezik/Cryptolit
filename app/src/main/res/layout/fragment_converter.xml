@@ -57,7 +57,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtFieldSymbolFrom"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="100dp"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:textColorHint="#fff"
@@ -106,7 +106,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtFieldSymbolTo"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="100dp"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:textColorHint="#fff"
                 app:boxStrokeColor="@color/text_input_box_stroke"
