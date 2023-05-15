@@ -8,12 +8,19 @@ import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.ItemFavouriteCoinBinding
 import sk.dominikjezik.cryptolit.models.Coin
 
+/**
+ * Trieda slúži ako adaptér pre RecyclerView používaný v HomeFragment
+ * na zobrazenie obľúbených coinov.
+ */
 class FavouriteCoinsAdapter(
     private val items: List<Coin>,
     private val onItemClickListener: ((Coin) -> Unit)? = null
 ) :
     RecyclerView.Adapter<FavouriteCoinsAdapter.FavouriteCoinViewHolder>() {
 
+    /**
+     * ViewHolder pre položku obľúbeného coinu.
+     */
     class FavouriteCoinViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding: ItemFavouriteCoinBinding
 
@@ -23,6 +30,9 @@ class FavouriteCoinsAdapter(
     }
 
 
+    /**
+     * Vytvára nový ViewHolder pre každú položku.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteCoinViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_favourite_coin, parent, false)
@@ -30,7 +40,10 @@ class FavouriteCoinsAdapter(
         return FavouriteCoinViewHolder(view)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+
+    /**
+     * Nastavuje obsah každej položky pre príslušnú kryptomenu.
+     */
     override fun onBindViewHolder(viewHolder: FavouriteCoinViewHolder, position: Int) {
         val coin = items[position]
 
@@ -41,7 +54,10 @@ class FavouriteCoinsAdapter(
         viewHolder.binding.coin = coin
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+
+    /**
+     * Vráti počet položiek v zozname.
+     */
     override fun getItemCount() = items.size
 
 }

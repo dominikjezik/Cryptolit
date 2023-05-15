@@ -23,6 +23,8 @@
             android:checkable="true"
             app:cardBackgroundColor="#80FFFFFF"
             app:cardElevation="0dp"
+            app:contentPaddingRight="8dp"
+            app:contentPaddingLeft="8dp"
             android:layout_gravity="center">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +38,8 @@
                     android:text="@{coin.name}"
                     android:textColor="@color/white"
                     android:textSize="18sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

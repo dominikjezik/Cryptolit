@@ -13,9 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.FragmentCoinDetailsBinding
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.models.CoinChartResponse
@@ -31,6 +29,19 @@ class CoinDetailsFragment : Fragment() {
 
     private val viewModel : CoinDetailsViewModel by viewModels();
 
+
+    /**
+     * Metóda nastaví data binding, z parametrov poslaných cez navigáciu sa pokúsi
+     * získať buď coin (navigácia z HomeFragmentu) alebo searchedCoin (navigácia
+     * z SearchFragmentu). Ak je poslaný searchedCoin premapuje ho na coin.
+     * Coin pošle do viewmodelu. Nastaví click listener na tlačidlo späť.
+     * Nastaví zobrazenie, štýl a funkčnosť grafu a nastaví observers.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +70,12 @@ class CoinDetailsFragment : Fragment() {
         return root;
     }
 
+
+    /**
+     * Nastaví observer na odpoveď z API, z ktorého získa vývoj cien
+     * v čase. Tieto dáta potom zobrazí do grafu. V prípade chyby
+     * zobrazí chybovú správu.
+     */
     private fun setupObservers() {
         viewModel.coinChartData.observe(viewLifecycleOwner) { response ->
             response.data?.let {
@@ -72,6 +89,14 @@ class CoinDetailsFragment : Fragment() {
     }
 
 
+    /**
+     * Spracuje odpoveď zo servera (vývoj cien) do grafu.
+     * Premapuje jednotlivé ceny v čase do Entry a
+     * LineDataSettu. Tiež nastaví štýly
+     * data settu a vloží do grafu.
+     *
+     * @param response vývoj cien
+     */
     private fun processResponseIntoChart(response: CoinChartResponse) {
         val entries = response.prices.map { Entry(it[0], it[1]) }
         val lineDataSet = LineDataSet(entries, "")
@@ -84,33 +109,13 @@ class CoinDetailsFragment : Fragment() {
         binding.lineChart.invalidate()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+
+    /**
+     * Metóda nastaví štýly grafu a akciu po držaní a pohybe
+     * prstu používateľa na grafe.
+     */
     private fun setupChart() = binding.lineChart.apply {
-
-        isHighlightPerDragEnabled = true
-
-        setOnTouchListener { v, event ->
-            val x = event.x
-            val y = event.y
-            when (event.action) {
-                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                    val entry: Entry? =
-                        getEntryByTouchPoint(x, y)
-                    if (entry != null) {
-                        val lastPrice = entry.y
-
-                        viewModel.displayPrice(lastPrice)
-                    }
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    // Zrušenie highlightu po uvoľnení prsta
-                    highlightValue(null)
-                    viewModel.displayDefaultPrice()
-                }
-            }
-            false
-        }
+        setOnChartTouchListener()
 
         legend.isEnabled = false
         description.isEnabled = false
@@ -132,6 +137,40 @@ class CoinDetailsFragment : Fragment() {
         axisLeft.gridColor = Color.WHITE
         axisLeft.gridLineWidth = 0.2f
     }
+
+
+    /**
+     * Metóda nastaví listener na držanie prsta používateľa na grafe.
+     * Dynamicky aktualizuje zobrazenú cenu v text view, na základe
+     * pozícií používateľa. Na danej pozícií zobrazí highlight.
+     * Po uvoľnení prsta zruší highlight a zobrazí predvolenú
+     * cenu t.j. aktuálnu.
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setOnChartTouchListener() {
+        binding.lineChart.apply {
+            setOnTouchListener { v, event ->
+                val x = event.x
+                val y = event.y
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                        val entry: Entry? = getEntryByTouchPoint(x, y)
+                        if (entry != null) {
+                            viewModel.displayPrice(entry.y)
+                        }
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        // Zrušenie highlightu po uvoľnení prsta
+                        highlightValue(null)
+                        viewModel.displayDefaultPrice()
+                    }
+                }
+                false
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

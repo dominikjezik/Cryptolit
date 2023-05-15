@@ -1,7 +1,6 @@
 package sk.dominikjezik.cryptolit.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +8,10 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import sk.dominikjezik.cryptolit.R
-import sk.dominikjezik.cryptolit.adapters.CoinsAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentConverterBinding
 import sk.dominikjezik.cryptolit.utilities.Response
-import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.utilities.displayErrorSnackBar
-import sk.dominikjezik.cryptolit.utilities.getErrorMessage
 import sk.dominikjezik.cryptolit.viewmodels.ConverterViewModel
 
 @AndroidEntryPoint
@@ -28,6 +22,16 @@ class ConverterFragment : Fragment() {
 
     private val viewModel: ConverterViewModel by viewModels()
 
+
+    /**
+     * Metóda nastaví data binding, zavolá metódu na stiahnutie kurzov z API,
+     * nastaví observers a nastaví listener na zmenu meny z oboch boxov.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,11 +51,22 @@ class ConverterFragment : Fragment() {
             viewModel.changeToExchangeRate(parent.getItemAtPosition(position) as String)
         }
 
-
         viewModel.fetchExchangeRates()
+        this.setupObservers()
 
+        return root
+    }
+
+
+    /**
+     * Nastaví observer, ktorý sleduje odpoveď zo servera. Ak zo servera prídu dáta
+     * skryje indikátor načítavania, nastaví skratky mien ako adaptéer do
+     * dvoch autoComplete listov a nastaví default hodnoty. Ak čakáme
+     * na odpoveď zobrazí indikátor načítavania. Ak nastane chyba
+     * zobrazí chybovú hlášku.
+     */
+    private fun setupObservers() {
         viewModel.response.observe(viewLifecycleOwner) { response ->
-
             response.data?.let {
                 binding.cpiLoadingIndicator.visibility = View.GONE
 
@@ -72,12 +87,12 @@ class ConverterFragment : Fragment() {
                 displayErrorSnackBar(response, binding.root, requireContext(), viewModel::fetchExchangeRates)
             }
         }
-
-        return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

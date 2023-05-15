@@ -30,6 +30,10 @@ class ConverterViewModel @Inject constructor(
 
     val displayToPrice = MutableLiveData<String>()
 
+
+    /**
+     * Stiahne kurzy z API pomocou repozitára, pričom ošetrí chybové stavy.
+     */
     fun fetchExchangeRates() = viewModelScope.launch {
         _response.postValue(Response.Waiting())
 
@@ -46,21 +50,57 @@ class ConverterViewModel @Inject constructor(
 
     }
 
+
+    /**
+     * Metóda je volaná pri zmene vybranej meny z fragmentu.
+     * Zmení vybranú "from" menu na menu z parametra.
+     * Prepočíta cenu.
+     *
+     * @param id
+     */
     fun changeFromExchangeRate(id: String) {
         this.selectedFromExchangeRate = id.lowercase()
         this.recalculatePrice()
     }
 
+
+    /**
+     * Metóda je volaná pri zmene vybranej meny z fragmentu.
+     * Zmení vybranú "to" menu na menu z parametra.
+     * Prepočíta cenu.
+     *
+     * @param id
+     */
     fun changeToExchangeRate(id: String) {
         this.selectedToExchangeRate = id.lowercase()
         this.recalculatePrice()
     }
 
-    fun onUserFromInputTextChanged(newText: CharSequence, a: Int, b: Int, c: Int) {
+
+    /**
+     * Metóda je volaná priamo z xml, keď používateľ zmení zadanú cenu z políčka "from" price.
+     * Parameter newText je text zadaný používateľom. Ostatné parametre nie sú využívané,
+     * ale kvôli správnemu fungovaniu data bindingu tu musia byť uvedené.
+     *
+     * @param newText text zadaný používateľom
+     * @param start
+     * @param before
+     * @param count
+     */
+    fun onUserFromInputTextChanged(newText: CharSequence, start: Int, before: Int, count: Int) {
         this.fromPrice = newText.toString()
         this.recalculatePrice()
     }
 
+
+    /**
+     * Vykoná prepočet podľa zadanej ceny "from" a podľa mien "from" a "to".
+     * Skontroluje či zadaná cena nie je prázdny reťazec alebo len bodka.
+     * Skontroluje existenciu meny v zozname všetkých mien. Prepočet
+     * vykoná ako:
+     *    zadaná cena * (cena cieľovej meny v hodnote bitcoin) / (cena aktuálnej meny v hodnote bitcoin)
+     * Výsledok naformátuje a zobrazí používateľovi.
+     */
     private fun recalculatePrice() {
         if (fromPrice.isEmpty() || fromPrice == ".") {
             displayToPrice.postValue("")

@@ -8,12 +8,19 @@ import sk.dominikjezik.cryptolit.R
 import sk.dominikjezik.cryptolit.databinding.ItemCoinBinding
 import sk.dominikjezik.cryptolit.models.Coin
 
+/**
+ * Trieda slúži ako adaptér pre RecyclerView používaný v HomeFragment
+ * na zobrazenie dostupných/watchlist coinov.
+ */
 class CoinsAdapter(
     private val items: List<Coin>,
     private val onItemClickListener: ((Coin) -> Unit)? = null
 ) :
     RecyclerView.Adapter<CoinsAdapter.CoinViewHolder>() {
 
+    /**
+     * ViewHolder pre položku coinu.
+     */
     class CoinViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding: ItemCoinBinding
 
@@ -22,6 +29,10 @@ class CoinsAdapter(
         }
     }
 
+
+    /**
+     * Vytvára nový ViewHolder pre každú položku.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinsAdapter.CoinViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_coin, parent, false)
@@ -29,7 +40,10 @@ class CoinsAdapter(
         return CoinViewHolder(view)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+
+    /**
+     * Nastavuje obsah každej položky pre príslušnú kryptomenu.
+     */
     override fun onBindViewHolder(viewHolder: CoinsAdapter.CoinViewHolder, position: Int) {
         val coin = items[position]
 
@@ -40,7 +54,10 @@ class CoinsAdapter(
         viewHolder.binding.coin = coin
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+
+    /**
+     * Vráti počet položiek v zozname.
+     */
     override fun getItemCount() = items.size
 
 }

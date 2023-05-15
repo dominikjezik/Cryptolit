@@ -7,7 +7,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import sk.dominikjezik.cryptolit.R
 
-// TODO: Funkcia z google kurzu
+/**
+ * Binding adaptér slúži na vloženie fotky, ktorá bola stiahnutá pomocou
+ * knižnice Glide, pričom uri obrázka sa získa z atribútu imgUri.
+ * Funkcia bola prebratá z google kurzu
+ *
+ * @param imgView
+ * @param imgUrl
+ */
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {

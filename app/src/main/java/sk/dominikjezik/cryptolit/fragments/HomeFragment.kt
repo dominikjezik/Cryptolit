@@ -27,6 +27,7 @@ class HomeFragment : Fragment() {
 
     private val viewModel : HomeViewModel by viewModels();
 
+
     /**
      * Metóda nastaví data binding, nastaví SwipeRefreshLayout,
      * zobrazí načítavanie a nastaví observers.
@@ -170,4 +171,5 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

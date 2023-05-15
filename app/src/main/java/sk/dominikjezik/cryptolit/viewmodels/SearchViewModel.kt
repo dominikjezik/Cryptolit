@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
-import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.utilities.handleIfNotSuccessful
 import sk.dominikjezik.cryptolit.utilities.handleNetworkCall
 import javax.inject.Inject
@@ -21,6 +20,7 @@ class SearchViewModel @Inject constructor(
     private val _coinsResult = MutableLiveData<Response<List<SearchedCoin>>>()
     val coinsResult: LiveData<Response<List<SearchedCoin>>> = _coinsResult
     var searchQuery: String = ""
+
 
     /**
      * Metóda po spustení nastavý výsledky vyhľadávania na Waiting,
@@ -46,6 +46,7 @@ class SearchViewModel @Inject constructor(
         }
 
     }
+
 
     /**
      * Metóda vyčistí zoznam nájdených výsledkov.

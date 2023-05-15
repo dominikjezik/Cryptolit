@@ -15,6 +15,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * Metóda nastaví data binding, nav controller, skryje action bar, nastaví
+     * bottom nav menu a skryje bottom nav menu pre CoinDetailsFragment.
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,4 +50,5 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide();
     }
+
 }

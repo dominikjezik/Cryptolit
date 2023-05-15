@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.Coin
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
-import sk.dominikjezik.cryptolit.utilities.ResponseError.*
 import sk.dominikjezik.cryptolit.utilities.handleIfNotSuccessful
 import sk.dominikjezik.cryptolit.utilities.handleNetworkCall
 import java.lang.Exception
@@ -56,7 +55,12 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    
+    /**
+     * Stiahne kryptomeny z API pomocou repozitára, pričom ošetrí chybové stavy.
+     * Zistí chýbajúce kryptomeny (kryptomeny, ktoré sú favourite alebo
+     * watchlist) a zavolá metódu na dodatočné stiahnutie. Vyfiltruje
+     * obľúbené coiny a zobrazí coiny v zozname.
+     */
     fun fetchCoins() = viewModelScope.launch {
         _coinsToDisplay.postValue(Response.Waiting());
 
@@ -76,6 +80,12 @@ class HomeViewModel @Inject constructor(
 
     }
 
+
+    /**
+     * Zobrazí na základe parametra zoznam kryptomien.
+     *
+     * @param displayAvailableCoins
+     */
     private fun displayCoinsInList(displayAvailableCoins: Boolean? = null) {
         if (displayAvailableCoins == true) {
             this._coinsToDisplay.postValue(Response.Success(_allCoins))
@@ -86,6 +96,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
+    /**
+     * Metóda porovná coiny stiahnuté z API a porovná ich s coinami uloženými
+     * v databáze (favourite, watchlist), a ak zistí, že niektoré coiny
+     * chýbajú dodatočne ich stiahne a pridá do listu všetkých coinov.
+     */
     private suspend fun findMissingCoins() {
         val storedCoins = coinsRepository.getStoredCoins()
         val coinsForDownload = storedCoins.filter { storedCoin ->
@@ -106,6 +122,11 @@ class HomeViewModel @Inject constructor(
         } catch (_: Exception) { }
     }
 
+
+    /**
+     * Vyfiltruje všetky stiahnuté kryptomeny podľa uložených coinov
+     * v databáze označené ako favourite a výsledky uloží do listu.
+     */
     private suspend fun filterFavouriteCoins() {
         val storedFavouriteCoins = coinsRepository.getStoredFavouriteCoins()
         val favouriteCoins = _allCoins.filter { coin ->
@@ -114,6 +135,11 @@ class HomeViewModel @Inject constructor(
         this._favouriteCoins.postValue(favouriteCoins)
     }
 
+
+    /**
+     * Vyfiltruje všetky stiahnuté kryptomeny podľa uložených coinov
+     * v databáze označené ako watchlist a výsledky uloží do listu.
+     */
     private suspend fun filterWatchlistCoins() {
         val storedWatchlistCoins = coinsRepository.getStoredWatchlistCoins()
         val watchlistCoins = _allCoins.filter { coin ->

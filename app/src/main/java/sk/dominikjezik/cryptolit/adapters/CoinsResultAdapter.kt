@@ -10,15 +10,15 @@ import sk.dominikjezik.cryptolit.databinding.ItemCoinResultBinding
 import sk.dominikjezik.cryptolit.models.SearchedCoin
 
 /**
- * Trieda slúži ako adaptér pre RecyclerView používaný
- * v SearchFragment na zobrazenie výsledkov
- * vyhľadávania.
+ * Trieda slúži ako adaptér pre RecyclerView používaný v SearchFragment
+ * na zobrazenie výsledkov vyhľadávania.
  */
 class CoinsResultAdapter(
     private val onItemClickListener: ((SearchedCoin) -> Unit)? = null
 ) : RecyclerView.Adapter<CoinsResultAdapter.CoinViewHolder>() {
 
     private var items: List<SearchedCoin> = listOf()
+
 
     /**
      * ViewHolder pre položku výsledku kryptomeny.
@@ -31,6 +31,7 @@ class CoinsResultAdapter(
         }
     }
 
+
     /**
      * Vytvára nový ViewHolder pre každú položku.
      */
@@ -40,6 +41,7 @@ class CoinsResultAdapter(
 
         return CoinViewHolder(view)
     }
+
 
     /**
      * Nastavuje obsah každej položky pre príslušnú kryptomenu.
@@ -54,10 +56,12 @@ class CoinsResultAdapter(
         viewHolder.binding.coin = coin
     }
 
+
     /**
      * Vráti počet položiek v zozname.
      */
     override fun getItemCount() = items.size
+
 
     /**
      * Nastaví zoznam výsledkov vyhľadávania kryptomien.

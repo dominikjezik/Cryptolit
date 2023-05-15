@@ -6,9 +6,10 @@ import java.io.Serializable
 
 /**
  * Kedže getSerializableExtra(String) je deprecated a odporúča sa použiť jej druhá verzia
- * ale táto verzia je dostupná až od Android 33, preto takáto pomocná metóda, ktorá použije správnu verziu
- * metódy podľa aktuálneho Androidu.
- * Myšlienka bola použitá z: https://stackoverflow.com/questions/72571804/getserializableextra-and-getparcelableextra-deprecated-what-is-the-alternative
+ * ale táto verzia je dostupná až od Android 33, preto takáto pomocná metóda,
+ * ktorá použije správnu verziu metódy podľa aktuálneho Androidu.
+ * Myšlienka bola použitá z:
+ * https://stackoverflow.com/questions/72571804/getserializableextra-and-getparcelableextra-deprecated-what-is-the-alternative
  *
  * @param T
  * @param activity

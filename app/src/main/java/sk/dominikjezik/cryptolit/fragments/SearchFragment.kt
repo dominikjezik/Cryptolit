@@ -15,7 +15,6 @@ import sk.dominikjezik.cryptolit.adapters.CoinsResultAdapter
 import sk.dominikjezik.cryptolit.databinding.FragmentSearchBinding
 import sk.dominikjezik.cryptolit.models.SearchedCoin
 import sk.dominikjezik.cryptolit.utilities.Response
-import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.utilities.getErrorMessage
 import sk.dominikjezik.cryptolit.viewmodels.SearchViewModel
 import java.util.concurrent.TimeUnit
@@ -28,6 +27,7 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
     private lateinit var coinsResultAdapter: CoinsResultAdapter
+
 
     /**
      * Metóda nastaví data binding, vytvorí príslušný adaptér
@@ -145,4 +145,5 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
