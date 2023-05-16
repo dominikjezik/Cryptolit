@@ -34,6 +34,7 @@ class CoinDetailsViewModel @Inject constructor(
 
     private var selectedPeriod = "1"
     private val decimalFormat = DecimalFormat("#.##########")
+    private var currentPrice = 0f
 
     private var _isFavourite = MutableLiveData(false)
     val isFavourite: LiveData<Boolean> = _isFavourite
@@ -75,6 +76,7 @@ class CoinDetailsViewModel @Inject constructor(
             val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
             _priceChangePercentageGrowth.postValue(percent>=0)
             _priceChangePercentage.postValue(String.format("%.2f %%", percent))
+            currentPrice = data.body()!!.prices.last()[1]
         }
     }
 
@@ -112,11 +114,16 @@ class CoinDetailsViewModel @Inject constructor(
 
 
     /**
-     * Metóda zobrazí predvolenú cenu (aktuálnu cenu).
+     * Metóda zobrazí predvolenú cenu (aktuálnu cenu). Používame pomocný atribút
+     * currentPrice, ktorý sa zdá byť zbytočný, ale ak by nastala situácia,
+     * že používateľ stratí internetové pripojenie, pokúsi sa zmeniť
+     * obdobie, vtedy sa nastaví response na Error a tým sa zmažú
+     * aj dáta, ktoré sme vložili do grafu, teda stratíme prístup
+     * k poslednej cene v grafe - aplikácia by preto spadla.
      */
     fun displayDefaultPrice() {
         this._coinChartData.value?.let {
-            displayPrice(it.data!!.prices.last()[1])
+            displayPrice(currentPrice)
         }
     }
 
