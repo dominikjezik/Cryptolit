@@ -59,7 +59,7 @@ class CoinDetailsFragment : Fragment() {
         if (coin != null) {
             viewModel.coin = coin
         } else {
-            viewModel.coin = Coin(searchedCoin!!.id, searchedCoin.symbol, searchedCoin.name, 0f, searchedCoin.large, searchedCoin.market_cap_rank)
+            viewModel.coin = Coin(searchedCoin!!.id, searchedCoin.symbol, searchedCoin.name, -1f, searchedCoin.large, searchedCoin.market_cap_rank)
         }
 
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }

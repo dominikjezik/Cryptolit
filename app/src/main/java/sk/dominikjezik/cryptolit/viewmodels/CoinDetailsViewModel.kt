@@ -28,13 +28,14 @@ class CoinDetailsViewModel @Inject constructor(
         get() = _coin
         set(value) {
             _coin = value
+            currentPrice = value.current_price
             fetchCoinChartData()
             fetchCoinType()
         }
 
     private var selectedPeriod = "1"
     private val decimalFormat = DecimalFormat("#.##########")
-    private var currentPrice = 0f
+    private var currentPrice = -1f;
 
     private var _isFavourite = MutableLiveData(false)
     val isFavourite: LiveData<Boolean> = _isFavourite
@@ -71,12 +72,16 @@ class CoinDetailsViewModel @Inject constructor(
             }
 
             _coinChartData.postValue(Response.Success(data.body()!!))
-            displayPrice(data.body()!!.prices.last()[1])
 
             val percent = (data.body()!!.prices.last()[1] / data.body()!!.prices.first()[1] - 1) * 100
             _priceChangePercentageGrowth.postValue(percent>=0)
             _priceChangePercentage.postValue(String.format("%.2f %%", percent))
-            currentPrice = data.body()!!.prices.last()[1]
+
+            if (currentPrice == -1f) {
+                currentPrice = data.body()!!.prices.last()[1]
+            }
+
+            displayPrice(currentPrice)
         }
     }
 
