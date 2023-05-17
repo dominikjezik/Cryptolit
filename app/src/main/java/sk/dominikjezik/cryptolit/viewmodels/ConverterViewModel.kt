@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import sk.dominikjezik.cryptolit.models.ExchangeRate
 import sk.dominikjezik.cryptolit.repositories.CoinsRepository
 import sk.dominikjezik.cryptolit.utilities.Response
-import sk.dominikjezik.cryptolit.utilities.ResponseError
 import sk.dominikjezik.cryptolit.utilities.handleIfNotSuccessful
 import sk.dominikjezik.cryptolit.utilities.handleNetworkCall
 import java.text.DecimalFormat
@@ -28,7 +27,8 @@ class ConverterViewModel @Inject constructor(
     var selectedToExchangeRate: String = "btc"
     private var fromPrice = ""
 
-    val displayToPrice = MutableLiveData<String>()
+    private val _displayToPrice = MutableLiveData<String>()
+    val displayToPrice: LiveData<String> = _displayToPrice
 
 
     /**
@@ -103,7 +103,7 @@ class ConverterViewModel @Inject constructor(
      */
     private fun recalculatePrice() {
         if (fromPrice.isEmpty() || fromPrice == ".") {
-            displayToPrice.postValue("")
+            _displayToPrice.postValue("")
             return
         }
 
@@ -120,7 +120,7 @@ class ConverterViewModel @Inject constructor(
         val newPrice = this.fromPrice.toFloat() * exchangeRateTo.value / exchangeRateFrom.value
 
         val decimalFormat = DecimalFormat("#.########")
-        displayToPrice.postValue(decimalFormat.format(newPrice))
+        _displayToPrice.postValue(decimalFormat.format(newPrice))
     }
 
 }

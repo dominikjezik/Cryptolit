@@ -132,7 +132,7 @@
 
             <EditText
                 android:id="@+id/edtTo"
-                android:text="@={viewmodel.displayToPrice}"
+                android:text="@{viewmodel.displayToPrice}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@null"
