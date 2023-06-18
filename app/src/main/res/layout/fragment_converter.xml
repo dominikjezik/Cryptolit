@@ -151,6 +151,21 @@
                 app:layout_constraintStart_toEndOf="@+id/txtFieldSymbolTo"
                 app:layout_constraintTop_toTopOf="@+id/txtFieldSymbolTo" />
 
+            <TextView
+                android:id="@+id/txtAttribution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/coingecko_attribution"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+            </TextView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
