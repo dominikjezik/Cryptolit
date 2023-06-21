@@ -1,7 +1,4 @@
-<div>
-  <img src="./dokumentacia/app-icon.png" alt="Cryptolit Logo" width="50" style="float:left; margin-bottom:20px;">
-  <h1 style="margin-left: 70px; display: inline-box; padding-top: 5px;">Cryptolit - Crypto Tracker</h1>
-</div>
+# Cryptolit - Crypto Tracker
 
 ![Cryptolit preview](./dokumentacia/banner-en.png)
 
@@ -35,10 +32,7 @@ Cryptolit is available on the Google Play. Click on the following link to instal
 
 
 
-<div>
-  <img src="./dokumentacia/app-icon.png" alt="Cryptolit Logo" width="50" style="float:left; margin-bottom:20px;">
-  <h1 style="margin-left: 70px; display: inline-box; padding-top: 5px;">Cryptolit - Sledujte krypto</h1>
-</div>
+# Cryptolit - Sledujte krypto
 
 ![Cryptolit preview](./dokumentacia/banner-sk.png)
 
